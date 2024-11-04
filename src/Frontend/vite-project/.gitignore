@@ -1,7 +1,5 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.js
 
@@ -23,3 +21,18 @@ yarn-debug.log*
 yarn-error.log*
 .yaml
 .env
+.lock
+
+.yarn/
+.yarnrc
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dotenv environment variables file
+.env
+
+# VS Code settings (optional, if you use VS Code)
+.vscode/
