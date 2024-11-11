@@ -1,4 +1,4 @@
-package Backend.src.main.product.entity;
+package com.finale.product.entity;
 
 public enum HashTag {
 	autumn("가을"), winter("겨울");
