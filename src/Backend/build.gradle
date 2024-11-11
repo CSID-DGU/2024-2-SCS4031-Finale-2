@@ -22,6 +22,7 @@ group = 'com.finale'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	
 	// Lombok
 	compileOnly 'org.projectlombok:lombok'
