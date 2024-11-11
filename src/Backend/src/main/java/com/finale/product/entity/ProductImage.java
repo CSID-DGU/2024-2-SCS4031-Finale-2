@@ -1,4 +1,4 @@
-package Backend.src.main.java.com.finale.product.entity;
+package com.finale.product.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

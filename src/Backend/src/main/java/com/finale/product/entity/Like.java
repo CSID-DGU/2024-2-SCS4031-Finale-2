@@ -1,4 +1,4 @@
-package Backend.src.main.product.entity;
+package com.finale.product.entity;
 
 import com.finale.user.entity.User;
 import jakarta.persistence.Entity;
