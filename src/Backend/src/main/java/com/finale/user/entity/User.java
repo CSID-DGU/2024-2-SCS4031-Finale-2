@@ -40,7 +40,7 @@ public class User {
 	private String address;
 	// 별도의 테이블 생성. 문자열로 저장
 	@ElementCollection(targetClass = HashTag.class)
-	@CollectionTable(name = "user_hashtags")
+	@CollectionTable(name = "user_hashtag")
 	@Enumerated(EnumType.STRING)
 	private List<HashTag> hashTags;
 }
