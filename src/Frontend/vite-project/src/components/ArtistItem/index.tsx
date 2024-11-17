@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { ThumbnailSquare } from "./Thumbnail";
 import LikeFollowers from "./LikeFollowers";
-import FollowButton from "./FollowButton";
+import FollowButton from "@/components/FollowButton";
 
 interface ArtistItemProps {
   themeNum: "one" | "two";
