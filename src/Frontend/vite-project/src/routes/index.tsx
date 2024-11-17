@@ -123,6 +123,8 @@ const router = createBrowserRouter([
   { path: RouterPath.signup, element: <Signup /> },
 ]);
 
-export const Routes = () => {
+const Routes = () => {
   return <RouterProvider router={router} />;
 };
+
+export default Routes;
