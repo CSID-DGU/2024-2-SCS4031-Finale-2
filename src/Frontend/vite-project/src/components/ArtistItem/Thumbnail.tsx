@@ -5,7 +5,7 @@ export const Thumbnail = () => {
 };
 
 export const ThumbnailSquare = () => {
-  return <SquareWrapper></SquareWrapper>;
+  return <SquareWrapper />;
 };
 
 const Wrapper = styled.div`
