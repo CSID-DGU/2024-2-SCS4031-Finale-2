@@ -2,6 +2,7 @@ package com.finale.user.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,15 +17,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "users") // 예약어 회피
+
 @AllArgsConstructor
 @Builder
 public class Social {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private User follower;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private ArtistInfo following;
 }
