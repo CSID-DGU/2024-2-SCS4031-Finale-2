@@ -3,11 +3,23 @@ package com.finale.product.service;
 import com.finale.product.dto.ProductSaveRequest;
 import com.finale.product.entity.Product;
 import com.finale.product.repository.ProductRepository;
+import com.finale.product.service.dto.ProductPage;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
+
     private final ProductRepository productRepository;
+
+    @Transactional(readOnly = true)
+    public ProductPage.Paging getProductsByPage(String query, Pageable pageable) {
+        var productPage = productRepository.findByNameWithIdx(query, pageable);
+        return ProductPage.Paging.from(productPage);
+    }
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
