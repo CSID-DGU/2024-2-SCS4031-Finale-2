@@ -1,7 +1,7 @@
 package com.finale.product.controller;
 
+import com.finale.product.dto.ProductRequest;
 import com.finale.product.dto.ProductResponse;
-import com.finale.product.dto.ProductSaveRequest;
 import com.finale.product.entity.Product;
 import com.finale.product.service.ProductService;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +18,21 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> saveProduct(@RequestBody ProductSaveRequest productSaveRequest) {
-        Product product = productService.save(productSaveRequest);
-        return ResponseEntity.ok().body(product);
+    public ResponseEntity<Void> saveProduct(@RequestBody ProductRequest productRequest) {
+        Product product = productService.save(productRequest);
+        return ResponseEntity.ok().build();
     }
     
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponse> getProductInfo(@PathVariable("productId") Long productId) {
         Product product = productService.find(productId);
         return ResponseEntity.ok(ProductResponse.from(product));
+    }
+    
+    @PutMapping("/{productId}")
+    public ResponseEntity<Void> editProductInfo(@PathVariable("productId") Long productId,
+                                                           @RequestBody ProductRequest productRequest) {
+        productService.edit(productId, productRequest);
+        return ResponseEntity.ok().build();
     }
 }

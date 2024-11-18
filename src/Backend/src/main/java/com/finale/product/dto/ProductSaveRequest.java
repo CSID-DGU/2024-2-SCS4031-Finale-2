@@ -7,7 +7,7 @@ import com.finale.user.entity.ArtistInfo;
 
 import java.util.List;
 
-public record ProductSaveRequest(
+public record ProductRequest(
         String name,
         String category,
         String size,
