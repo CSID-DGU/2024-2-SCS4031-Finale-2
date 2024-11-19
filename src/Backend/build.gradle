@@ -44,6 +44,11 @@ group = 'com.finale'
 	// Monitoring
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'io.micrometer:micrometer-registry-prometheus'
+  
+    // Spring Security
+    implementation 'org.springframework.security:spring-security-web:5.8.2'
+    implementation 'org.springframework.security:spring-security-config:5.8.2'
+  
   }
 
 tasks.named('test') {
