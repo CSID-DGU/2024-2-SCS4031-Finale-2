@@ -1,4 +1,4 @@
-package com.finale.product.dto;
+package com.finale.product.service.dto;
 
 import com.finale.product.entity.Category;
 import com.finale.product.entity.HashTag;
