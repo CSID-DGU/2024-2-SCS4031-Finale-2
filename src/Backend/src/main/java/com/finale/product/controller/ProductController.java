@@ -2,11 +2,11 @@ package com.finale.product.controller;
 
 import static com.finale.product.util.SortUtil.convertProductSort;
 
-import com.finale.product.dto.ProductRequest;
-import com.finale.product.dto.ProductResponse;
 import com.finale.product.entity.Product;
 import com.finale.product.service.ProductService;
 import com.finale.product.service.dto.ProductPage;
+import com.finale.product.service.dto.ProductRequest;
+import com.finale.product.service.dto.ProductResponse;
 import com.finale.product.util.ProductSort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
