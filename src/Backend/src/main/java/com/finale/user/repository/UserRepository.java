@@ -9,6 +9,5 @@ import com.finale.user.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
-    import java.util.Optional;
+    Optional<User> findById(Long id);
 }
