@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-
     private final ProductRepository productRepository;
 
     @Transactional(readOnly = true)
@@ -21,17 +20,14 @@ public class ProductService {
         return ProductPage.Paging.from(productPage);
     }
 
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    public Product save(ProductRequest productSaveRequest) {
 
-    public Product save(ProductSaveRequest productSaveRequest) {
         //TODO ArtistInfo 코드 병합시 수정 예정
         Product product = productSaveRequest.toEntity(null);
         productRepository.save(product);
         return product;
     }
-    
+
     public Product find(Long productId) {
         return productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 id입니다"));
     }
@@ -50,7 +46,6 @@ public class ProductService {
                 productRequest.hashTags(),
                 null);
     }
-
     public void delete(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 id입니다"));
         productRepository.deleteById(productId);
