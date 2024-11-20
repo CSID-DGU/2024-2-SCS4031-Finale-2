@@ -5,16 +5,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@AllArgsConstructor
+@Builder
+
 public class ArtistInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@NotNull
-	private String name;
 	
 	@Column(nullable = false)
 	private Long totalFollowers;
@@ -22,5 +28,5 @@ public class ArtistInfo {
 	@Column(nullable = false)
 	private Long totalLikes;
 
-	private String about;
+	private String about = "";
 }
