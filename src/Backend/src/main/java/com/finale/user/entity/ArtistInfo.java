@@ -16,17 +16,20 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @Builder
-
 public class ArtistInfo {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+
+	private Long userId;
+
+	private String artistType;
 	
 	@Column(nullable = false)
 	private Long totalFollowers;
 
 	@Column(nullable = false)
 	private Long totalLikes;
-
 	private String about = "";
 }
