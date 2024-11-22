@@ -23,13 +23,14 @@ public class BusinessArtist {
 	private Long id;
 
 	@Column(nullable = false)
-	private Long userId;
-	@Column(nullable = false)
 	private String businessNumber;
+
 	@Column(nullable = false)
 	private String openDate;
+
 	@Column(nullable = false)
 	private String headName;
+
 	@OneToOne
 	private ArtistInfo artistInfo;
 }
