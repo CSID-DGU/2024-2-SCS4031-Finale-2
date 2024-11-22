@@ -35,14 +35,22 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)
 	private Long id;
+
+	@Column(nullable = false)
+	private String name;
+	
 	@Column(nullable = false)
 	private String nickname;
+
 	@Column(nullable = false)
 	private String email;
+
 	@Column(nullable = false)
 	private String birthdate;
+
 	@Column(nullable = false)
 	private String phone;
+
 	@Column(nullable = false)
 	private String address;
 
