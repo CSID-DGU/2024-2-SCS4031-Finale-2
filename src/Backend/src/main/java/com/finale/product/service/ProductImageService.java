@@ -1,7 +1,7 @@
 package com.finale.product.service;
 
 import com.finale.global.utils.AwsS3FileUtils;
-import com.finale.product.entity.ProductImage;
+import com.finale.product.dto.FileUploadResponse;
 import com.finale.product.repository.ProductImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,17 @@ public class ProductImageService {
     private final ProductImageRepository productImageRepository;
     
     @Transactional
-    public List<String> uploadMultiFiles(Long productId, List<MultipartFile> files) throws IOException {
-        List<String> urlList = awsS3FileUtils.uploadMultiImages(files);
-        urlList.forEach(fileUrl -> {
-            ProductImage productImage = new ProductImage(fileUrl,productId);
-            productImageRepository.save(productImage);
-        });
-        return urlList;
+    public List<FileUploadResponse> uploadMultiFiles(Long productId, List<MultipartFile> files) throws IOException {
+        List<FileUploadResponse> uploadResponses = awsS3FileUtils.uploadMultiImages(files);
+        uploadResponses.forEach(response ->
+            productImageRepository.save(response.toEntity(productId)));
+        return uploadResponses;
+    }
+    @Transactional
+    public void editImages(Long productId, List<MultipartFile> files) throws IOException {
+        //우선은 전부 삭제하고 다시 업로드
+        //추후에 개선 예정
+        productImageRepository.deleteAllByProductId(productId);
+        uploadMultiFiles(productId, files);
     }
 }
