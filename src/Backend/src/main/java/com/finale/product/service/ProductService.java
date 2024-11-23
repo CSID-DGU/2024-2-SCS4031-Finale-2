@@ -1,12 +1,11 @@
 package com.finale.product.service;
 
+import com.finale.product.dto.ProductRequest;
+import com.finale.product.entity.Category;
 import com.finale.product.entity.Product;
+import com.finale.product.repository.ProductImageRepository;
 import com.finale.product.repository.ProductRepository;
-import com.finale.product.service.dto.ProductPage;
-import com.finale.product.service.dto.ProductSaveRequest;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,15 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-
-    @Transactional(readOnly = true)
-    public ProductPage.Paging getProductsByPage(String query, Pageable pageable) {
-        var productPage = productRepository.findByNameWithIdx(query, pageable);
-        return ProductPage.Paging.from(productPage);
-    }
+    private final ProductImageRepository productImageRepository;
 
     public Product save(ProductRequest productSaveRequest) {
-
         //TODO ArtistInfo 코드 병합시 수정 예정
         Product product = productSaveRequest.toEntity(null);
         productRepository.save(product);
@@ -47,8 +40,10 @@ public class ProductService {
                 productRequest.hashTags(),
                 null);
     }
+
     public void delete(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 id입니다"));
         productRepository.deleteById(productId);
+        productImageRepository.deleteAllByProductId(productId);
     }
 }
