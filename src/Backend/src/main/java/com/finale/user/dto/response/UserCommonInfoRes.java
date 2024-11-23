@@ -3,6 +3,7 @@ package com.finale.user.dto.response;
 import java.util.List;
 
 import com.finale.product.entity.HashTag;
+import com.finale.user.dto.UserDto;
 import com.finale.user.dto.UserInfoDto;
 
 public record UserCommonInfoRes(
@@ -10,11 +11,11 @@ public record UserCommonInfoRes(
 	List<HashTag> hashTags,
 	String userImageUrl
 ) {
-	public static UserCommonInfoRes fromDto(UserInfoDto userInfoDto) {
+	public static UserCommonInfoRes fromDto(UserDto userDto) {
 		return new UserCommonInfoRes(
-			userInfoDto.nickname(),
-			userInfoDto.hashTags(),
-			userInfoDto.userImageUrl()
+			userDto.userInfo().name(),
+			userDto.userInfo().hashTags(),
+			userDto.userImageUrl()
 		);
 	}
     

@@ -23,8 +23,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserInfo {
 	private String name;
-	private String nickname;
-	private String userImageUrl;
 	private String email;
 	private String birthdate;
 	private String phone;
