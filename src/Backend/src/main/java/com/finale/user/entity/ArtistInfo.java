@@ -22,14 +22,12 @@ public class ArtistInfo {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private Long userId;
-
-	private String artistType;
-	
 	@Column(nullable = false)
 	private Long totalFollowers;
 
 	@Column(nullable = false)
 	private Long totalLikes;
+	
+	@Builder.Default
 	private String about = "";
 }
