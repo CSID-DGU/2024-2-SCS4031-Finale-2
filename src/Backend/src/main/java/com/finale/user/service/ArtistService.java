@@ -30,11 +30,11 @@ public class ArtistService {
 	private final ArtistInfoRepository artistInfoRepository;
 	@Transactional
 	public void registerStudentsArtist(StudentArtistReq studentArtistReq, Long userId) {
-		
+
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
-		if(artistInfoRepository.existsByUserId(userId)) {
+		if (artistInfoRepository.existsByUserId(userId)) {
 			throw new IllegalArgumentException("이미 등록된 아티스트입니다.");
 		}
 
@@ -48,8 +48,6 @@ public class ArtistService {
 			.about(studentArtistReq.about())
 			.build();
 
-		artistInfoRepository.save(artistInfo);
-		
 		// StudentArtist 생성
 		StudentArtist studentArtist = StudentArtist.builder()
 			.schoolName(studentArtistReq.schoolName())
@@ -66,7 +64,7 @@ public class ArtistService {
 
 		User user = userRepository.getReferenceById(userId);
 
-		if(artistInfoRepository.existsByUserId(userId)) {
+		if (artistInfoRepository.existsByUserId(userId)) {
 			throw new IllegalArgumentException("이미 등록된 아티스트입니다.");
 		}
 
@@ -80,8 +78,6 @@ public class ArtistService {
 			.about(businessArtistReq.about())
 			.build();
 
-		artistInfoRepository.save(artistInfo);
-		
 		BusinessArtist businessArtist = BusinessArtist
 			.builder()
 			.businessNumber(businessArtistReq.businessNumber())
@@ -94,10 +90,11 @@ public class ArtistService {
 	}
 
 	@Transactional
-public ArtistDetailsRes getArtistDetails(Long userId) {
+	public ArtistDetailsRes getArtistDetails(Long userId) {
 		ArtistInfo artistInfo = artistInfoRepository.findByUserId(userId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아티스트입니다."));
 		ArtistInfoDto artistInfoDto = ArtistInfoDto.fromEntity(artistInfo);
+
 		switch (artistInfo.getArtistType()) {
 			case STUDENT:
 				StudentArtist studentArtist = studentArtistRepository.findByArtistInfo(artistInfo)
@@ -106,7 +103,7 @@ public ArtistDetailsRes getArtistDetails(Long userId) {
 				return ArtistDetailsRes.from(artistInfoDto, studentArtistDto);
 			case BUSINESS:
 				BusinessArtist businessArtist = businessArtistRepository.findByArtistInfo(artistInfo)
-						.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사업자 아티스트입니다."));
+					.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사업자 아티스트입니다."));
 				BusinessArtistDto businessArtistDto = BusinessArtistDto.from(businessArtist);
 				return ArtistDetailsRes.from(artistInfoDto, businessArtistDto);
 			default:
