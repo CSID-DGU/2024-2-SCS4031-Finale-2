@@ -30,13 +30,13 @@ public class UserService {
 
 	@Transactional
 	public UserInfoDto getUserInfo(Long userId) {
-		System.out.println("userId = " + userId);
 		UserInfo userInfo = userRepository.findById(userId)
 			.orElseThrow(() -> new ResourceNotFoundException())
 			.getUserInfo();
-		System.out.println("userInfo = " + userInfo);
+
 		return UserInfoDto.fromEntity(userInfo);
 	}
+	
 	@Transactional
 	public UserDto updateUserInfo(UserInfoDto userInfoDto, Long userId) {
 		User existingUser = userRepository.findById(userId)
