@@ -20,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Controller
+
+
 public class WebSecurityConfig {
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -37,13 +39,15 @@ public class WebSecurityConfig {
 		http.csrf(AbstractHttpConfigurer::disable);
 		http.sessionManagement((session) -> session
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
 		http.authorizeHttpRequests((authorize) ->
 			authorize
 				.requestMatchers(
 					"/login", "/signup", "/", "/user",
 					"/api/auth/**",
 					"/swagger-ui/**",
-					"/actuator/**"
+					"/actuator/**",
+					"/v1/**"
 				).permitAll()
 				.anyRequest().authenticated()
 		);
@@ -52,8 +56,9 @@ public class WebSecurityConfig {
 			.authenticationEntryPoint(jwtAuthenticationEntryPoint)
 			.accessDeniedHandler(jwtAccessDeniedHandler)
 		);
-        
+
 		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 		return http.build();
 	}
 
