@@ -1,5 +1,6 @@
 package com.finale.product.controller;
 
+import com.finale.product.dto.FileUploadResponse;
 import com.finale.product.dto.ProductImageResponse;
 import com.finale.product.dto.ProductRequest;
 import com.finale.product.dto.ProductResponse;
@@ -30,9 +31,10 @@ public class ProductController {
 
     @PostMapping("/{productId}/images")
     public ResponseEntity<ProductImageResponse> uploadImages(@PathVariable("productId") Long productId, List<MultipartFile> files) throws IOException {
-        List<String> urls = productImageService.uploadMultiFiles(productId,files);
-        return ResponseEntity.ok(new ProductImageResponse(urls));
+        List<FileUploadResponse> responses = productImageService.uploadMultiFiles(productId,files);
+        return ResponseEntity.ok(new ProductImageResponse(responses.stream().map(FileUploadResponse::photoUrl).toList()));
     }
+
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponse> getProductInfo(@PathVariable("productId") Long productId) {
         Product product = productService.find(productId);
@@ -46,6 +48,11 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/{productId}/images")
+    public ResponseEntity<Void> editImages(@PathVariable("productId") Long productId, List<MultipartFile> files) throws IOException {
+        productImageService.editImages(productId, files);
+        return ResponseEntity.ok().build();
+    }
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable("productId") Long productId) {
         productService.delete(productId);
