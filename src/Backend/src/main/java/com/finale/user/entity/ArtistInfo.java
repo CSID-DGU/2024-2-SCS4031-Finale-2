@@ -26,6 +26,7 @@ public class ArtistInfo {
 	private Long userId;
 	private String nickname;
 
+	private String artistImageUrl;
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private ArtistType artistType;
