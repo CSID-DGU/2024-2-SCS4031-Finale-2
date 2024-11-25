@@ -1,8 +1,9 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import { Outlet } from 'react-router-dom';
 
+import BasicLayout from '@/components/layouts/BasicLayout';
 import ArtistDetails from '@/pages/ArtistDetails';
 import Categories from '@/pages/Categories';
+import Chat from '@/pages/Chat';
 import Discover from '@/pages/Discover';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
@@ -18,13 +19,14 @@ import SearchResults from '@/pages/SearchResults';
 import Signup from '@/pages/Signup';
 import { ProtectedRoute } from './ProtectedRoute';
 import { RouterPath } from './path';
+
 const Routes = () => {
   return <RouterProvider router={router} />;
 };
 const router = createBrowserRouter([
   {
     path: RouterPath.root,
-    element: <Outlet />, // 레이아웃 추후 추가하기
+    element: <BasicLayout />,
     children: [
       {
         path: RouterPath.home,
@@ -65,6 +67,11 @@ const router = createBrowserRouter([
       {
         path: `${RouterPath.artists}/:artistId`,
         element: <ArtistDetails />,
+      },
+      {
+        path: RouterPath.chat,
+        element: <ProtectedRoute />,
+        children: [{ index: true, element: <Chat /> }],
       },
       {
         path: RouterPath.my,
