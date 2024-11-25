@@ -66,4 +66,9 @@ public class User {
 	public String getEmail() {
 		return userInfo.getEmail();
 	}
+
+    public LocalDateTime getCreatedDate() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCreatedDate'");
+    }
 }

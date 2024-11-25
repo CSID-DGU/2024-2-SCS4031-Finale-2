@@ -14,6 +14,7 @@ import com.finale.product.dto.ProductRequest;
 import com.finale.product.dto.ProductResponse;
 import com.finale.product.entity.Product;
 import com.finale.product.service.ProductImageService;
+import com.finale.product.service.ProductLikeService;
 import com.finale.product.service.ProductService;
 import com.finale.product.util.ProductSort;
 import com.finale.review.dto.ReviewResponse;
@@ -48,13 +49,13 @@ public class ProductController implements ProductApiDocs {
     }
 
     @PostMapping("/images")
-    public ResponseEntity<ProductImageResponse> uploadImages(List<MultipartFile> files) {
+    public ResponseEntity<ApiResponse<ProductImageResponse>> uploadImages(List<MultipartFile> files) {
         List<ImageUpload> responses = productImageService.uploadMultiFiles(files);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.OK,new ProductImageResponse(responses.stream().map(ImageUpload::photoUrl).toList())));
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponse> getProductInfo(@PathVariable("productId") Long productId) {
+    public ResponseEntity<ApiResponse<ProductResponse>> getProductInfo(@PathVariable("productId") Long productId) {
         Product product = productService.find(productId);
         List<String> urls = productImageService.getImages(productId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.OK,ProductResponse.from(product,urls)));
@@ -68,7 +69,7 @@ public class ProductController implements ProductApiDocs {
     }
 
     @PutMapping("/{productId}/images")
-    public ResponseEntity<Void> editImages(@PathVariable("productId") Long productId, List<MultipartFile> files) {
+    public ResponseEntity<ApiResponse<Void>> editImages(@PathVariable("productId") Long productId, List<MultipartFile> files) {
         productImageService.editImages(productId, files);
         List<String> images = productImageService.uploadMultiFiles(files).stream()
                 .map(ImageUpload::photoUrl).toList();
@@ -76,8 +77,9 @@ public class ProductController implements ProductApiDocs {
         productImageService.saveImages(productId,images);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.OK));
     }
+
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable("productId") Long productId) {
+    public ResponseEntity<ApiResponse<Void>> deleteProduct(@PathVariable("productId") Long productId) {
         productService.delete(productId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.NO_CONTENT));
     }

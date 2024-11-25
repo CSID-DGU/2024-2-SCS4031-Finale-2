@@ -74,7 +74,7 @@ public class ArtistService {
 		User user = userRepository.getReferenceById(userId);
 
 		if (artistInfoRepository.existsByUserId(userId)) {
-			throw new DuplicateRequestException("이미 등록된 아티스트입니다.");
+			throw new DuplicateResourceException("이미 등록된 아티스트입니다.");
 		}
 
 		// BusinessArtist 생성
@@ -100,10 +100,27 @@ public class ArtistService {
 	}
 
 	@Transactional
-	public ArtistDetailsRes getArtistDetails(Long userId) {
-		ArtistInfo artistInfo = artistInfoRepository.findByUserId(userId)
+	public ArtistDetailsRes getArtistDetails(Long artistInfoId) {
+		ArtistInfo artistInfo = artistInfoRepository.findById(artistInfoId)
 			.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 아티스트입니다."));
+
 		return getArtistDetailsRes(artistInfo, false);
+	}
+
+	@Transactional
+	public ArtistDetailsRes getArtistPublicDetails(Long artistInfoId, Long followerId) {
+		ArtistInfo artistInfo = artistInfoRepository.findById(artistInfoId)
+			.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 아티스트입니다."));
+
+		boolean isFollowed = socialRepository.existsByFollowerIdAndFollowingId(followerId, artistInfoId);
+		return getArtistDetailsRes(artistInfo, isFollowed);
+	}
+
+	@Transactional(readOnly = true)
+	public ArtistInfoPage.Paging getArtistsByPage(String query, Pageable pageable, Long userId) {
+		var artistInfoPage = artistInfoRepository.findByNicknameWithIdx(query, pageable);
+		Set<Long> followingArtist = socialRepository.findFollowingIdByFollowerId(userId);
+		return ArtistInfoPage.Paging.of(artistInfoPage, followingArtist);
 	}
 
 	private ArtistDetailsRes getArtistDetailsRes(ArtistInfo artistInfo, boolean isFollowed) {
@@ -114,20 +131,14 @@ public class ArtistService {
 				StudentArtist studentArtist = studentArtistRepository.findByArtistInfo(artistInfo)
 					.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 학생 아티스트입니다."));
 				StudentArtistDto studentArtistDto = StudentArtistDto.from(studentArtist);
-				return ArtistDetailsRes.from(artistInfoDto, studentArtistDto);
+				return ArtistDetailsRes.from(artistInfoDto, studentArtistDto, isFollowed);
 			case BUSINESS:
 				BusinessArtist businessArtist = businessArtistRepository.findByArtistInfo(artistInfo)
 					.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 사업자 아티스트입니다."));
 				BusinessArtistDto businessArtistDto = BusinessArtistDto.from(businessArtist);
-				return ArtistDetailsRes.from(artistInfoDto, businessArtistDto);
+				return ArtistDetailsRes.from(artistInfoDto, businessArtistDto, isFollowed);
 			default:
 				throw new ResourceNotFoundException("존재하지 않는 아티스트입니다.");
 		}
-	}
-	
-	@Transactional(readOnly = true)
-	public ArtistInfoPage.Paging getArtistsByPage(String query, Pageable pageable) {
-		var artistInfoPage = artistInfoRepository.findByNicknameWithIdx(query, pageable);
-		return ArtistInfoPage.Paging.from(artistInfoPage);
 	}
 }

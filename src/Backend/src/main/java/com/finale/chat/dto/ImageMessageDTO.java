@@ -2,7 +2,7 @@ package com.finale.chat.dto;
 
 
 import com.finale.chat.entity.ChatMessage;
-import com.fianle.chat.entity.MessageType;
+import com.finale.chat.entity.MessageType;
 import lombok.Getter;
 import lombok.Setter;
 

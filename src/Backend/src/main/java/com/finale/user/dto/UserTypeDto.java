@@ -7,6 +7,6 @@ import lombok.Builder;
 @Builder
 public record UserTypeDto(
 	String role,
-	String userType
+	ArtistType userType
 ) {
 }
