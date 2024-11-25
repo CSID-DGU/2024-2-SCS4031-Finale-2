@@ -1,6 +1,7 @@
 package com.finale.product.controller;
 
 import com.finale.product.dto.FileUploadResponse;
+import com.finale.product.dto.ImageUpload;
 import com.finale.product.dto.ProductImageResponse;
 import com.finale.product.dto.ProductRequest;
 import com.finale.product.dto.ProductResponse;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -25,14 +25,16 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Void> saveProduct(@RequestBody ProductRequest productRequest) {
-        productService.save(productRequest);
+        Product product = productService.save(productRequest);
+        productImageService.saveImages(product.getId(),productRequest.productImages());
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{productId}/images")
-    public ResponseEntity<ProductImageResponse> uploadImages(@PathVariable("productId") Long productId, List<MultipartFile> files) {
-        List<FileUploadResponse> responses = productImageService.uploadMultiFiles(productId,files);
-        return ResponseEntity.ok(new ProductImageResponse(responses.stream().map(FileUploadResponse::photoUrl).toList()));
+    @PostMapping("/images")
+    public ResponseEntity<ProductImageResponse> uploadImages(List<MultipartFile> files) {
+        List<ImageUpload> responses = productImageService.uploadMultiFiles(files);
+        return ResponseEntity.ok(new 
+        ProductImageResponse(responses.stream().map(ImageUpload::photoUrl).toList()));
     }
 
     @GetMapping("/{productId}")
@@ -50,8 +52,10 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}/images")
-    public ResponseEntity<Void> editImages(@PathVariable("productId") Long productId, List<MultipartFile> files) throws IOException {
+    public ResponseEntity<Void> editImages(@PathVariable("productId") Long productId, List<MultipartFile> files) {
         productImageService.editImages(productId, files);
+        List<ImageUpload> images = productImageService.uploadMultiFiles(files);
+        productImageService.saveImages(productId,images);
         return ResponseEntity.ok().build();
     }
     @DeleteMapping("/{productId}")
