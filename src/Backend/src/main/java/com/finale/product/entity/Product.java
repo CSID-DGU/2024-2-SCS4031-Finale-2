@@ -49,7 +49,7 @@ public class Product extends BaseTimeEntity {
 	
 	public Product() {}
 	@Builder
-	public Product(String name, Category category, String size, Long price, String description, String preferredLocation, List<HashTag> hashTags, ArtistInfo artistInfo) {
+	public Product(String name, Category category, String size, Long price, String description, String preferredLocation, List<HashTag> hashTags, ArtistInfo artistInfo,String thumbnailUrl) {
 		this.name = name;
 		this.category = category;
 		this.size = size;

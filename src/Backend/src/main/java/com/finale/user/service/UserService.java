@@ -43,7 +43,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserDto updateUserInfo(UserInfoDto userInfoDto, Long userId) {
+	public UserDto updateUser(UserCommonInfoDto userCommonInfoDto, UserInfoDto userInfoDto, Long userId) {
 
 		User existingUser = checkUser(userId);
 
@@ -61,13 +61,13 @@ public class UserService {
 		return UserDto.fromEntity(userRepository.save(existingUser));
 	}
 
+
 	@Transactional
 	public UserTypeDto getUserType(Long userId) {
-		String usertype = artistInfoRepository.findByUserId(userId)
-			.map(artistInfo -> artistInfo.getArtistType().getType()) // 값이 있을 때 처리
-			.orElse("User"); // 값이 없을 때 기본값
+		ArtistType usertype = artistInfoRepository.findByUserId(userId)
+			.map(artistInfo -> artistInfo.getArtistType()) // 값이 있을 때 처리
+			.orElse(ArtistType.USER); // 값이 없을 때 기본값
 
-		//artistType을 확인
 		return UserTypeDto.builder()
 			.userType(usertype)
 			.build();
@@ -75,7 +75,6 @@ public class UserService {
 
 	@Transactional
 	public Page<UserFollowingRes> getFollowingWithPaging(Long userId, Pageable pageable) {
-
 		return userRepository.findFollowingUsers(userId, pageable)
 			.map(UserFollowingRes::fromDto);
 	}
@@ -86,7 +85,7 @@ public class UserService {
 		ArtistInfo artistInfo = getArtistInfo(artistId);
 
 		if(isFollowing(user, artistInfo)) {
-			throw new DuplicateRequestException("이미 팔로우한 아티스트입니다.");
+			throw new DuplicateResourceException("이미 팔로우한 아티스트입니다.");
 		}
 
 		Social social = Social.builder()
