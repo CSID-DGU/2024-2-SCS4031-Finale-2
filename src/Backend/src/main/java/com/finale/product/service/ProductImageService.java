@@ -2,9 +2,10 @@ package com.finale.product.service;
 
 import com.finale.global.utils.AwsS3FileUtils;
 import com.finale.product.dto.ImageUpload;
-import com.finale.product.dto.ProductRequest;
 import com.finale.product.entity.ProductImage;
 import com.finale.product.repository.ProductImageRepository;
+import com.finale.product.service.dto.ProductRequest;
+
 import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class ProductImageService {
     private final ProductImageRepository productImageRepository;
 
     @Transactional
-    public List<ImageUpload> uploadMultiFiles(Long productId, List<MultipartFile> files) {
+    public List<ImageUpload> uploadMultiFiles(List<MultipartFile> files) {
         List<ImageUpload> imageUploads = new ArrayList<>();
         for (MultipartFile multipartFile:files) {
             imageUploads.add(awsS3FileUtils.uploadMultiImages(multipartFile));
@@ -29,8 +30,8 @@ public class ProductImageService {
     }
 
     @Transactional
-    public void saveImages(Long productId,ProductRequest productRequest) {
-        productRequest.productImages().forEach(image -> productImageRepository.save(image.toEntity(productId)));
+    public void saveImages(Long productId,List<ImageUpload> files) {
+        files.forEach(image -> productImageRepository.save(image.toEntity(productId)));
     }
     
     @Transactional
@@ -38,8 +39,9 @@ public class ProductImageService {
         
         //우선은 전부 삭제하고 다시 업로드
         //추후에 개선 예정
+        //TODO s3서버에서 기존 사진들을 제거하는 기능
+
         productImageRepository.deleteAllByProductId(productId);
-        uploadMultiFiles(productId, files);
     }
     public List<String> getImages(Long productId) {
         return productImageRepository.findAllByProductId(productId).stream().map(ProductImage::getPhotoUrl).toList();
