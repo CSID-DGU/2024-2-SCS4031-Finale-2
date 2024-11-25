@@ -1,7 +1,12 @@
 package com.finale.global.security;
 
+import static org.springframework.security.config.Customizer.*;
+
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,6 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,27 +44,56 @@ public class WebSecurityConfig {
 	}
 
 	@Bean
+	public SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
+		http
+			.securityMatcher("/oauth2/**")
+			.csrf(AbstractHttpConfigurer::disable)
+			.authorizeHttpRequests((authorize) -> authorize
+				.requestMatchers("/oauth2/authorization/**",
+					"/oauth2/code/kakao/**"
+				).permitAll()
+				.anyRequest().authenticated()
+			)
+			.oauth2Login((oauth2) -> oauth2
+				.redirectionEndpoint(redirection -> redirection
+					.baseUri("/oauth2/code/*"))
+				.userInfoEndpoint((userInfo) -> userInfo
+					.userService(new Oauth2CustomUserService())
+				)
+				// 추후 로그인 방식이 다양해지면, Handler의 세부 내용을 변경.
+				.successHandler((request, response, authentication) -> {
+					response.sendRedirect("/oauth2/login/kakao");
+				})
+				.failureHandler((request, response, exception) -> {
+					System.out.println(exception.getMessage());
+				})
+			);
+		return http.build();
+	}
+
+	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable);
 		http.sessionManagement((session) -> session
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
+		http.cors(withDefaults());
 		http.authorizeHttpRequests((authorize) ->
 			authorize
+				.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 				.requestMatchers(
-					"/login", "/signup", "/", "/user",
-					"/api/auth/**",
 					"/swagger-ui/**",
 					"/swagger-resources",
 					"/v3/api-docs/**",
 					"/actuator/**",
-					"/v1/**",
-					"swagger-ui/**"
+					"/test/signup",
+					"/v1/products/**",
+					"/v1/reviews/**",
+					"/ws/**",
+					"/v1/artists/**",
+						"v1/chat/**"
 				).permitAll()
 				.anyRequest().authenticated()
-		);
-
-		http.exceptionHandling((exception) -> exception
+		).exceptionHandling((exception) -> exception
 			.authenticationEntryPoint(jwtAuthenticationEntryPoint)
 			.accessDeniedHandler(jwtAccessDeniedHandler)
 		);
