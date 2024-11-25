@@ -6,6 +6,8 @@ import java.util.Set;
 import com.finale.product.entity.HashTag;
 import com.finale.user.entity.UserInfo;
 
+import lombok.Builder;
+
 public record UserInfoDto(
 	String name,
 	String email,
