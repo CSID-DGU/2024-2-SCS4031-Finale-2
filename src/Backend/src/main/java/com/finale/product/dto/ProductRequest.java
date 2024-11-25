@@ -30,4 +30,9 @@ public record ProductRequest(
                 .artistInfo(artistInfo)
                 .build();
     }
+
+    public String getThumbnailImage() {
+        return imageUrls.get(0);
+    }
+    
 }

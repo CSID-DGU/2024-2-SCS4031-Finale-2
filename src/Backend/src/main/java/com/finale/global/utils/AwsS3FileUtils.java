@@ -4,7 +4,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.finale.product.dto.FileUploadResponse;
 import com.finale.product.dto.ImageUpload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AwsS3FileUtils {
     private final AmazonS3 amazonS3;
+    
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
