@@ -1,5 +1,6 @@
 package com.finale.product.dto;
 
+import com.finale.product.entity.Product;
 import com.finale.product.repository.dto.ProductSearch;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,17 @@ public class ProductPage {
                     productSearch.getThumbnailUrl()
             );
         }
+
+        public static Info fromProduct(Product product) {
+            return new Info(
+                    product.getId(),
+                    product.getName(),
+                    product.getArtistInfo().getNickname(),
+                    product.getPrice(),
+                    product.getThumbnailUrl()
+            );
+        }
+
         public static List<Info> of(List<ProductSearch> content) {
             return content.stream()
                     .map(Info::from)
@@ -35,6 +47,12 @@ public class ProductPage {
             return new Paging(
                     productPage.hasNext(),
                     Info.of(productPage.getContent())
+            );
+        }
+        public static Paging fromProduct(Page<Product> productPage) {
+            return new Paging(
+                    productPage.hasNext(),
+                    productPage.map(Info::fromProduct).toList()
             );
         }
     }
