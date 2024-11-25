@@ -1,10 +1,8 @@
 package com.finale.user.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.finale.global.exception.user.ResourceNotFoundException;
 import com.finale.user.dto.ArtistInfoDto;
+import com.finale.user.dto.ArtistInfoPage;
 import com.finale.user.dto.BusinessArtistDto;
 import com.finale.user.dto.StudentArtistDto;
 import com.finale.user.dto.request.BusinessArtistReq;
@@ -22,6 +20,9 @@ import com.finale.repository.UserRepository;
 import com.sun.jdi.request.DuplicateRequestException;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -113,5 +114,11 @@ public class ArtistService {
 			default:
 				throw new ResourceNotFoundException("존재하지 않는 아티스트입니다.");
 		}
+	}
+	
+	@Transactional(readOnly = true)
+	public ArtistInfoPage.Paging getArtistsByPage(String query, Pageable pageable) {
+		var artistInfoPage = artistInfoRepository.findByNicknameWithIdx(query, pageable);
+		return ArtistInfoPage.Paging.from(artistInfoPage);
 	}
 }
