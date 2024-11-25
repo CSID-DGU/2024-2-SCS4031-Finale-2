@@ -39,13 +39,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
         
-		// TODO: UserDetailsService를 통해 사용자 정보를 가져와 인증을 진행한다.
 		if (jwtProvider.validateToken(rawToken, true)) {
 			JwtUser jwtUser = jwtProvider.getJwtUser(rawToken);
 			Authentication authentication = new UsernamePasswordAuthenticationToken(jwtUser, null,
 				jwtUser.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication);
+		} else {
+			log.info("유효하지 않은 토큰 발생");
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰이 유효하지 않습니다.");
 		}
+		
 		filterChain.doFilter(request, response);
 	}
 }
