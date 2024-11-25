@@ -36,6 +36,8 @@ public class Product extends BaseTimeEntity {
 	@Column(nullable = false)
 	private String preferredLocation;
 
+	private String thumbnailUrl;
+
 	@ElementCollection(targetClass = HashTag.class)
 	@CollectionTable(name = "product_hashtags")
 	@Enumerated(EnumType.STRING)
@@ -95,5 +97,9 @@ public class Product extends BaseTimeEntity {
 		this.preferredLocation = preferredLocation;
 		this.hashTags = hashTags;
 		this.artistInfo = artistInfo;
+	}
+	
+	public void updateThumbnail(String thumbnailUrl) {
+		this.thumbnailUrl = thumbnailUrl;
 	}
 }
