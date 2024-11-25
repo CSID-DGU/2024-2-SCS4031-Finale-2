@@ -13,15 +13,32 @@ import lombok.Builder;
 
 @Entity
 public class Review {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	@Column(nullable = false)
 	private String content;
+	
 	@ManyToOne
 	@JoinColumn(name = "writer_id", nullable = false)
 	private User writer;
+	
 	@ManyToOne
 	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
+
+	@Builder
+	public Review(Long id, String content, User writer, Product product) {
+		this.id = id;
+		this.content = content;
+		this.writer = writer;
+		this.product = product;
+	}
+
+	public Review() {}
+	public void updateContent(String content) {
+		this.content = content;
+	}
 }
