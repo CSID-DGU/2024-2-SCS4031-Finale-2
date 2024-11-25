@@ -2,9 +2,10 @@
 package com.finale.user.entity;
 
 public enum ArtistType {
-	BUSINESS("BusinessArtist"), STUDENT("StudentArtist");
+	USER("User"), BUSINESS("BusinessArtist"), STUDENT("StudentArtist");
 
 	private final String type;
+	
 	ArtistType(String type) {
 		this.type = type;
 	}
