@@ -1,26 +1,25 @@
 export const RouterPath = {
-  root: "/",
-  home: "/",
-  discover: "/discover",
-  categories: "/categories",
-  search: "/search",
-  results: "/results",
-  products: "/products",
-  artists: "/artists",
+  root: '/',
+  home: '/',
+  discover: 'discover',
+  categories: 'categories',
+  search: 'search',
+  results: 'results',
+  products: 'products',
+  artists: 'artists',
 
-  my: "/my",
-  orders: "/orders",
-  favorites: "/favorites",
-  sales: "/sales",
-  gallery: "/gallery",
+  my: 'my',
+  orders: 'orders',
+  favorites: 'favorites',
+  sales: 'sales',
+  gallery: 'gallery',
 
-  posting: "/posting",
+  posting: 'posting',
 
-  login: "/login",
-  signup: "/signup",
-  notFound: "*",
+  login: '/login',
+  signup: '/signup',
+  notFound: '*',
 };
-
 export const getDynamicPath = {
   // 로그인 필요한 페이지라면 로그인 페이지로 리디렉트, 로그인 완료 시 원래 페이지로 리디렉트
   login: (redirect?: string) => {
