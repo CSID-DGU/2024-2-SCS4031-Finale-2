@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.finale.global.jwt.JwtProvider;
 import com.finale.global.jwt.JwtUser;
+import com.finale.user.controller.apiDocs.ArtistApiDocs;
 import com.finale.user.dto.request.BusinessArtistReq;
 import com.finale.user.dto.request.StudentArtistReq;
 import com.finale.user.dto.response.ArtistDetailsRes;
@@ -22,9 +23,9 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "작가 관련 기능", description = "작가 관련 API")
-public class ArtistController {
+public class ArtistController implements ArtistApiDocs {
 	private final ArtistService artistService;
-	private final JwtProvider jwtProvider;
+	
 
 	@Operation(summary = "학생 작가 등록", description = "학생 작가 등록")
 	@PostMapping("/v1/artists/students")
