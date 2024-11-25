@@ -26,7 +26,7 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<Void> saveProduct(@RequestBody ProductRequest productRequest) {
         Product product = productService.save(productRequest);
-        productImageService.saveImages(product.getId(),productRequest.productImages());
+        productImageService.saveImages(product.getId(),productRequest.imageUrls());
         return ResponseEntity.ok().build();
     }
 
@@ -54,7 +54,9 @@ public class ProductController {
     @PutMapping("/{productId}/images")
     public ResponseEntity<Void> editImages(@PathVariable("productId") Long productId, List<MultipartFile> files) {
         productImageService.editImages(productId, files);
-        List<ImageUpload> images = productImageService.uploadMultiFiles(files);
+        List<String> images = productImageService.uploadMultiFiles(files).stream()
+                .map(ImageUpload::photoUrl).toList();
+                
         productImageService.saveImages(productId,images);
         return ResponseEntity.ok().build();
     }
