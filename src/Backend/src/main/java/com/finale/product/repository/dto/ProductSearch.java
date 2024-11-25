@@ -5,4 +5,5 @@ public interface ProductSearch {
     String getName();
     String getArtist();
     Long getPrice();
+    String getThumbnailUrl();
 }
