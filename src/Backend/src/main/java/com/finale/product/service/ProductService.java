@@ -5,9 +5,11 @@ import com.finale.product.entity.Category;
 import com.finale.product.entity.Product;
 import com.finale.product.repository.ProductImageRepository;
 import com.finale.product.repository.ProductRepository;
+import com.finale.product.dto.ProductPage;
 import com.finale.user.entity.ArtistInfo;
 import com.finale.user.repository.ArtistInfoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,12 +18,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
-    private final ArtistInfoRepository artistInfoRepository;
+    
+    @Transactional(readOnly = true)
+    public ProductPage.Paging getProductsByPage(String query, Pageable pageable) {
+        var productPage = productRepository.findByNameWithIdx(query, pageable);
+        return ProductPage.Paging.from(productPage);
+    }
+
 
     public Product save(ProductRequest productSaveRequest) {
-        ArtistInfo artistInfo = artistInfoRepository.findById(productSaveRequest.artistInfoId())
-        .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 작가 정보입니다."));
-Product product = productSaveRequest.toEntity(artistInfo);
+        //TODO ArtistInfo 코드 병합시 수정 예정
+        Product product = productSaveRequest.toEntity(null);
         productRepository.save(product);
         return product;
     }
@@ -33,8 +40,7 @@ Product product = productSaveRequest.toEntity(artistInfo);
     @Transactional
     public void edit(Long productId, ProductRequest productRequest) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 id입니다"));
-        ArtistInfo artistInfo = artistInfoRepository.findById(productRequest.artistInfoId())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 작가 정보입니다."));
+        //TODO ArtistInfo 코드 병합시 수정 예정
         product.update(
                 productRequest.name(),
                 Category.fromString(productRequest.category()),
@@ -43,7 +49,7 @@ Product product = productSaveRequest.toEntity(artistInfo);
                 productRequest.description(),
                 productRequest.preferredLocation(),
                 productRequest.hashTags(),
-                artistInfo);
+                null);
     }
 
     public void delete(Long productId) {
