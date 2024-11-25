@@ -43,9 +43,9 @@ public class AwsS3FileUtils {
             ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 실패" + fileName);
         }
             
-        return new ImageUpload(amazonS3.getUrl(bucket,fileName).toString(),fileName);
+        return new ImageUpload(amazonS3.getUrl(bucket,fileName).toString());
     }
-    
+
     public String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
