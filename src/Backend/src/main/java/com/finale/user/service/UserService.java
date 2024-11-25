@@ -5,21 +5,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.finale.global.exception.user.DuplicateResourceException;
 import com.finale.global.exception.user.ResourceNotFoundException;
+import com.finale.global.utils.AwsS3FileUtils;
+import com.finale.user.dto.UserCommonInfoDto;
 import com.finale.user.dto.UserDto;
 import com.finale.user.dto.UserInfoDto;
 import com.finale.user.dto.UserTypeDto;
 import com.finale.user.dto.response.UserFollowingRes;
 import com.finale.user.entity.ArtistInfo;
+import com.finale.user.entity.ArtistType;
 import com.finale.user.entity.Social;
 import com.finale.user.entity.User;
 import com.finale.user.entity.UserInfo;
 import com.finale.user.repository.ArtistInfoRepository;
 import com.finale.user.repository.SocialRepository;
 import com.finale.user.repository.UserRepository;
-import com.sun.jdi.request.DuplicateRequestException;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,12 +32,12 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final ArtistInfoRepository artistInfoRepository;
 	private final SocialRepository socialRepository;
+	private final AwsS3FileUtils awsS3FileUtils;
 
 
 	@Transactional
 	public UserDto getUserInfo(Long userId) {
-		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 유저입니다."));
+		User user = checkUser(userId);
 			
 			return UserDto.fromEntity(user);
 	}
@@ -40,10 +45,18 @@ public class UserService {
 	@Transactional
 	public UserDto updateUserInfo(UserInfoDto userInfoDto, Long userId) {
 
-		User existingUser = userRepository.findById(userId)
-			.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 유저입니다."));
+		User existingUser = checkUser(userId);
 
-		existingUser.updateUserInfo(userInfoDto.toEntity());
+		userRepository.findByNickname(userCommonInfoDto.nickname())
+			.ifPresent(user -> {
+				if(!user.getId().equals(userId)) {
+					throw new DuplicateResourceException("이미 사용중인 닉네임입니다.");
+				}
+			});
+
+		UserInfo userInfo = userInfoDto.toEntity();
+		existingUser.updateUserCommonInfo(userCommonInfoDto.nickname(), userCommonInfoDto.ImageUrl());
+		existingUser.updateUserInfo(userInfo);
 
 		return UserDto.fromEntity(userRepository.save(existingUser));
 	}
@@ -69,13 +82,10 @@ public class UserService {
 
 	@Transactional
 	public void followArtist(Long userId, Long artistId) {
-		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 유저입니다."));
+		User user = checkUser(userId);
+		ArtistInfo artistInfo = getArtistInfo(artistId);
 
-		ArtistInfo artistInfo = artistInfoRepository.findByUserId(artistId)
-			.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 아티스트입니다."));
-
-		if (socialRepository.existsByFollowerAndFollowing(user, artistInfo)) {
+		if(isFollowing(user, artistInfo)) {
 			throw new DuplicateRequestException("이미 팔로우한 아티스트입니다.");
 		}
 
@@ -89,15 +99,45 @@ public class UserService {
 
 	@Transactional
 	public void unfollowArtist(Long userId, Long artistId) {
-		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 유저입니다."));
+		User user = checkUser(userId);
+		ArtistInfo artistInfo = getArtistInfo(artistId);
 
+		if(isFollowing(user, artistInfo)) {
+			Social social = getSocial(user, artistInfo);
+			socialRepository.delete(social);
+		}
+	}
+
+	@Transactional
+	public boolean checkSignup(String email) {
+		return userRepository.findByUserInfoPhone(email).isPresent();
+	}
+
+	private User checkUser(Long userId) {
+		return userRepository.findById(userId)
+			.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 유저입니다."));
+	}
+
+	private Social getSocial(User user, ArtistInfo artistInfo) {
+		return socialRepository.findByFollowerAndFollowing(user, artistInfo)
+			.orElseThrow(() -> new ResourceNotFoundException("팔로우하지 않은 아티스트입니다."));
+	}
+
+	private boolean isFollowing(User user, ArtistInfo artistInfo) {
+		return socialRepository.existsByFollowerAndFollowing(user, artistInfo);
+	}
+
+	private ArtistInfo getArtistInfo(Long artistId) {
 		ArtistInfo artistInfo = artistInfoRepository.findByUserId(artistId)
 			.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 아티스트입니다."));
+		return artistInfo;
+	}
 
-		Social social = socialRepository.findByFollowerAndFollowing(user, artistInfo)
-			.orElseThrow(() -> new ResourceNotFoundException("팔로우하지 않은 아티스트입니다."));
+	public Optional<User> findById(Long userId) {
+		return userRepository.findById(userId);
+	}
 
-		socialRepository.delete(social);
+	public Optional<User> findByEmail(String email) {
+		return userRepository.findByUserInfoEmail(email);
 	}
 }

@@ -1,5 +1,6 @@
 package com.finale.user.service;
 
+import com.finale.global.exception.user.DuplicateResourceException;
 import com.finale.global.exception.user.ResourceNotFoundException;
 import com.finale.user.dto.ArtistInfoDto;
 import com.finale.user.dto.ArtistInfoPage;
@@ -15,9 +16,10 @@ import com.finale.user.entity.StudentArtist;
 import com.finale.user.entity.User;
 import com.finale.user.repository.ArtistInfoRepository;
 import com.finale.user.repository.BusinessArtistRepository;
+import com.finale.user.repository.SocialRepository;
 import com.finale.user.repository.StudentArtistRepository;
-import com.finale.repository.UserRepository;
-import com.sun.jdi.request.DuplicateRequestException;
+import com.finale.user.repository.UserRepository;
+import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,9 @@ public class ArtistService {
 	private final BusinessArtistRepository businessArtistRepository;
 	private final StudentArtistRepository studentArtistRepository;
 	private final ArtistInfoRepository artistInfoRepository;
+	private final UserService userService;
+	private final SocialRepository socialRepository;
+
 	@Transactional
 	public void registerStudentsArtist(StudentArtistReq studentArtistReq, Long userId) {
 
@@ -98,6 +103,10 @@ public class ArtistService {
 	public ArtistDetailsRes getArtistDetails(Long userId) {
 		ArtistInfo artistInfo = artistInfoRepository.findByUserId(userId)
 			.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 아티스트입니다."));
+		return getArtistDetailsRes(artistInfo, false);
+	}
+
+	private ArtistDetailsRes getArtistDetailsRes(ArtistInfo artistInfo, boolean isFollowed) {
 		ArtistInfoDto artistInfoDto = ArtistInfoDto.fromEntity(artistInfo);
 
 		switch (artistInfo.getArtistType()) {
