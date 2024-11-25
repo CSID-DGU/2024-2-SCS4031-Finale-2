@@ -1,5 +1,5 @@
 const MyOrders = () => {
-  return <></>;
+  return <>MyFavorites</>;
 };
 
 export default MyOrders;

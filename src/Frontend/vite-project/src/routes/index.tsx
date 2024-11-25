@@ -1,31 +1,30 @@
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from "react-router-dom";
-import ArtistDetails from "@/pages/ArtistDetails";
-import Categories from "@/pages/Categories";
-import Discover from "@/pages/Discover";
-import Home from "@/pages/Home";
-import Login from "@/pages/Login";
-import My from "@/pages/My";
-import MyFavorites from "@/pages/MyFavorites";
-import MyGallery from "@/pages/Mygallery";
-import MyOrders from "@/pages/MyFavorites";
-import MySales from "@/pages/MySales";
-import ProductDetails from "@/pages/ProductDetails";
-import ProductPosting from "@/pages/ProductPosting";
-import Search from "@/pages/Search";
-import SearchResults from "@/pages/SearchResults";
-import Signup from "@/pages/Signup";
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
-import { ProtectedRoute } from "./ProtectedRoute";
-import { RouterPath } from "./path";
-
+import ArtistDetails from '@/pages/ArtistDetails';
+import Categories from '@/pages/Categories';
+import Discover from '@/pages/Discover';
+import Home from '@/pages/Home';
+import Login from '@/pages/Login';
+import My from '@/pages/My';
+import MyFavorites from '@/pages/MyFavorites';
+import MyGallery from '@/pages/MyGallery';
+import MyOrders from '@/pages/MyOrders';
+import MySales from '@/pages/MySales';
+import ProductDetails from '@/pages/ProductDetails';
+import ProductPosting from '@/pages/ProductPosting';
+import Search from '@/pages/Search';
+import SearchResults from '@/pages/SearchResults';
+import Signup from '@/pages/Signup';
+import { ProtectedRoute } from './ProtectedRoute';
+import { RouterPath } from './path';
+const Routes = () => {
+  return <RouterProvider router={router} />;
+};
 const router = createBrowserRouter([
   {
     path: RouterPath.root,
-    element: <></>, // 레이아웃 추후 추가하기
+    element: <Outlet />, // 레이아웃 추후 추가하기
     children: [
       {
         path: RouterPath.home,
@@ -50,17 +49,16 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: `${RouterPath.products}/:productId`,
+        element: <ProductDetails />,
+      },
+      {
         path: RouterPath.products,
-        element: null,
+        element: <ProtectedRoute />,
         children: [
-          { path: "/:productId", element: <ProductDetails /> },
           {
             path: RouterPath.posting,
-            element: (
-              <ProtectedRoute>
-                <ProductPosting />
-              </ProtectedRoute>
-            ),
+            element: <ProductPosting />,
           },
         ],
       },
@@ -70,43 +68,24 @@ const router = createBrowserRouter([
       },
       {
         path: RouterPath.my,
-        element: (
-          <ProtectedRoute>
-            <My />
-          </ProtectedRoute>
-        ),
+        element: <ProtectedRoute />,
         children: [
+          { index: true, element: <My /> },
           {
             path: RouterPath.orders,
-            element: (
-              <ProtectedRoute>
-                <MyOrders />
-              </ProtectedRoute>
-            ),
+            element: <MyOrders />,
           },
           {
             path: RouterPath.favorites,
-            element: (
-              <ProtectedRoute>
-                <MyFavorites />
-              </ProtectedRoute>
-            ),
+            element: <MyFavorites />,
           },
           {
             path: RouterPath.sales,
-            element: (
-              <ProtectedRoute>
-                <MySales />
-              </ProtectedRoute>
-            ),
+            element: <MySales />,
           },
           {
             path: RouterPath.gallery,
-            element: (
-              <ProtectedRoute>
-                <MyGallery />
-              </ProtectedRoute>
-            ),
+            element: <MyGallery />,
           },
         ],
       },
@@ -120,11 +99,10 @@ const router = createBrowserRouter([
     path: RouterPath.login,
     element: <Login />,
   },
-  { path: RouterPath.signup, element: <Signup /> },
+  {
+    path: RouterPath.signup,
+    element: <Signup />,
+  },
 ]);
-
-const Routes = () => {
-  return <RouterProvider router={router} />;
-};
 
 export default Routes;
