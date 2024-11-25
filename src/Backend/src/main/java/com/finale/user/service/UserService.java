@@ -30,12 +30,11 @@ public class UserService {
 
 
 	@Transactional
-	public UserInfoDto getUserInfo(Long userId) {
-		UserInfo userInfo = userRepository.findById(userId)
-			.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 유저입니다."))
-			.getUserInfo();
-
-		return UserInfoDto.fromEntity(userInfo);
+	public UserDto getUserInfo(Long userId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new ResourceNotFoundException("존재하지 않는 유저입니다."));
+			
+			return UserDto.fromEntity(user);
 	}
 
 	@Transactional
@@ -101,3 +100,4 @@ public class UserService {
 
 		socialRepository.delete(social);
 	}
+}
