@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.finale.global.entity.BaseTimeEntity;
 import com.finale.product.entity.HashTag;
 
 import jakarta.persistence.CollectionTable;
@@ -41,24 +42,28 @@ public class User {
 	@Column(nullable = false)
 	private Long id;
 
+	@Column(nullable = false, unique = true)
 	private String nickname;
 	private String userImageUrl;
 
 	@Embedded
 	private UserInfo userInfo;
 
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-	@CreatedDate
-	@Column(nullable = false, updatable = false)
-	protected LocalDateTime createdAt;
+	public void updateUserCommonInfo(String nickname, String userImageUrl) {
+		this.nickname = nickname;
+		this.userImageUrl = userImageUrl;
+	}
 
 	public void updateUserInfo(UserInfo userInfo) {
-		// TODO: 유저 정보 업데이트시 유효성 검사
-		setUserInfo(userInfo);
+		this.userInfo = userInfo;
 	}
 
 	private User setUserInfo(UserInfo userInfo) {
 		this.userInfo = userInfo;
 		return this;
+	}
+
+	public String getEmail() {
+		return userInfo.getEmail();
 	}
 }
