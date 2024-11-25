@@ -1,5 +1,6 @@
-package com.finale.product.entity;
+package com.finale.review.entity;
 
+import com.finale.product.entity.Product;
 import com.finale.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Builder;
+
 @Entity
 public class Review {
 	@Id
