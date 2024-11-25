@@ -3,12 +3,16 @@ package com.finale.product.controller;
 import com.finale.product.dto.FileUploadResponse;
 import com.finale.product.dto.ImageUpload;
 import com.finale.product.dto.ProductImageResponse;
+import static com.finale.product.util.SortUtil.convertProductSort;
 import com.finale.product.dto.ProductRequest;
 import com.finale.product.dto.ProductResponse;
 import com.finale.product.entity.Product;
 import com.finale.product.service.ProductImageService;
 import com.finale.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import com.finale.product.dto.ProductPage;
+import com.finale.product.util.ProductSort;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,7 +60,7 @@ public class ProductController {
         productImageService.editImages(productId, files);
         List<String> images = productImageService.uploadMultiFiles(files).stream()
                 .map(ImageUpload::photoUrl).toList();
-                
+
         productImageService.saveImages(productId,images);
         return ResponseEntity.ok().build();
     }
@@ -64,5 +68,17 @@ public class ProductController {
     public ResponseEntity<Void> deleteProduct(@PathVariable("productId") Long productId) {
         productService.delete(productId);
         return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping
+    public ResponseEntity<ProductPage.Paging> getProductsByPage(
+        @RequestParam("query") String query,
+        @RequestParam(name = "size", required = false, defaultValue = "20") int size,
+        @RequestParam("page") int page,
+        @RequestParam("sort") ProductSort productSort
+    ) {
+        var sort = convertProductSort(productSort);
+        var pageable = PageRequest.of(page, size, sort);
+        return ResponseEntity.ok(productService.getProductsByPage(query, pageable));
     }
 }
