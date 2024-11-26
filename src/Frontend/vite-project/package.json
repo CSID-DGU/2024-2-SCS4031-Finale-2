@@ -24,8 +24,9 @@
     "react-hook-form": "^7.53.1",
     "react-router-dom": "^6.26.2",
     "swipejs": "^2.3.1",
+    "swiper": "^11.1.14",
     "vite-plugin-svgr": "^4.2.0",
-    "swiper": "^11.1.14"
+    "zustand": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
