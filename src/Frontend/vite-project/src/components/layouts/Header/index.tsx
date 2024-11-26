@@ -1,24 +1,32 @@
-import styled from '@emotion/styled';
-import Logo from '@/assets/logo.svg?react';
-import IconButton from '@/components/common/IconButton';
+import styled from "@emotion/styled";
+import { useLocation } from "react-router-dom";
+
+import Logo from "@/assets/logo.svg?react";
+import IconButton from "@/components/common/IconButton";
+import { RouterPath } from "@/routes/path";
+import type { Mode } from "@/types";
 
 interface HeaderProps {
-  mode: 'user' | 'seller';
-  page: 'home' | 'other';
-  title?: 'string';
+  mode: Mode;
+  title?: string;
   leftSideChildren?: React.ReactNode;
   rightSideChildren?: React.ReactNode;
 }
-
-const Header = ({ mode, page, title, leftSideChildren, rightSideChildren }: HeaderProps) => {
+const Header = ({
+  mode,
+  title,
+  leftSideChildren,
+  rightSideChildren,
+}: HeaderProps) => {
+  const { pathname } = useLocation();
   const renderElements = () => {
-    if (page === 'home') {
+    if (pathname === RouterPath.home) {
       return (
         <>
           <Logo />
           <IconBox>
             <IconButton icon="search" />
-            {mode === 'user' ? (
+            {mode === "user" ? (
               <IconButton icon="favorite-default" />
             ) : (
               <IconButton icon="store-default" />
@@ -26,8 +34,7 @@ const Header = ({ mode, page, title, leftSideChildren, rightSideChildren }: Head
           </IconBox>
         </>
       );
-    }
-    if (page === 'other') {
+    } else {
       return (
         <>
           {/* 있을 때만 렌더링됨 */}
@@ -37,19 +44,17 @@ const Header = ({ mode, page, title, leftSideChildren, rightSideChildren }: Head
         </>
       );
     }
-    return null;
   };
-
-  return <HeaderWrapper>{renderElements()}</HeaderWrapper>;
+  return <Wrapper>{renderElements()}</Wrapper>;
 };
 
 export default Header;
 
 // styles
-export const HEADER_HEIGHT = '4.4rem';
-
-const HeaderWrapper = styled.div`
-  position: sticky;
+export const HEADER_HEIGHT = "4.4rem";
+const Wrapper = styled.header`
+  position: fixed;
+  z-index: 1000;
   top: 0;
   width: 100%;
   height: ${HEADER_HEIGHT};
@@ -57,13 +62,13 @@ const HeaderWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
 `;
 
 export const IconBox = styled.div`
   display: flex;
   gap: 10px;
 `;
-
 const TitleBox = styled.div`
   position: absolute;
   top: 50%;
