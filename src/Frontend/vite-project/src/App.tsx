@@ -1,6 +1,10 @@
-import { ChakraProvider, ChakraProviderProps } from '@chakra-ui/react';
-import Routes from '@/routes';
-const App = () => {
+import { ChakraProvider, ChakraProviderProps } from "@chakra-ui/react";
+
+import "swiper/css";
+import "swiper/css/pagination";
+import Routes from "@/routes";
+
+function App() {
   const chakraProps: ChakraProviderProps = {};
 
   return (
@@ -8,6 +12,5 @@ const App = () => {
       <Routes />
     </ChakraProvider>
   );
-};
+}
 export default App;
-
