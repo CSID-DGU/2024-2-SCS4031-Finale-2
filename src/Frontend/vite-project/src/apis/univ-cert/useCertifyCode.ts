@@ -1,7 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
 
-import { fetchInstance } from "../instance";
-import { API_KEY, BASE_URL } from "./index";
+import fetchInstance from '../fetchInstance';
+import { API_KEY, BASE_URL } from './index';
 
 type CertifyCodeProps = {
   email: string;
@@ -25,10 +25,7 @@ async function certifyCode({
   const requestBody = { key: API_KEY, email, univName, code };
 
   // 실패해도 에러 처리 안 됨. 정상 응답 옴
-  const response = await fetchInstance(BASE_URL).post(
-    `/certifycode`,
-    requestBody
-  );
+  const response = await fetchInstance(BASE_URL).post(`/certifycode`, requestBody);
   // console.log('certifyCode response: ', response);
 
   return response.data;

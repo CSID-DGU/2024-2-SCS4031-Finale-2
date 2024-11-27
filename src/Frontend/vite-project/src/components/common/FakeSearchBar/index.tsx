@@ -1,19 +1,18 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
-import SearchIcon from "@/assets/icons/search.svg?react";
-import IconButton from "@/components/common/IconButton";
-import { HEADER_HEIGHT } from "@/components/layouts/Header";
+import SearchIcon from '@/assets/icons/search.svg?react';
+import IconButton from '@/components/common/IconButton';
+import useSearchModalStore from '@/store/useSearchModalStore';
+import { HEIGHTS } from '@/styles/constants';
 
-const SEARCH_PLACEHOLDER = "작품/작가 외 검색은 #을 붙여주세요";
+const SEARCH_PLACEHOLDER = '작품/작가 외 검색은 #을 붙여주세요';
 
-interface FakeSearchBarProps {
-  modalOpen: () => void;
-}
+const FakeSearchBar = () => {
+  const { isModalOpen, setIsModalOpen } = useSearchModalStore();
 
-const FakeSearchBar = ({ modalOpen }: FakeSearchBarProps) => {
   return (
     <SearchBarWrapper>
-      <InputBox onClick={modalOpen}>
+      <InputBox onClick={() => setIsModalOpen(!isModalOpen)}>
         <StyledSearchIcon />
         <Input type="text" placeholder={SEARCH_PLACEHOLDER} />
       </InputBox>
@@ -24,19 +23,18 @@ const FakeSearchBar = ({ modalOpen }: FakeSearchBarProps) => {
 
 export default FakeSearchBar;
 
-const SEARCHBAR_HEIGHT = HEADER_HEIGHT;
-
 const SearchBarWrapper = styled.div`
   position: sticky;
   top: 0;
   width: 100%;
-  height: ${SEARCHBAR_HEIGHT};
+  height: ${HEIGHTS.HEADER};
   padding: 6px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
   cursor: pointer;
+  background-color: var(--color-white);
 `;
 
 const InputBox = styled.div`
@@ -56,6 +54,7 @@ const Input = styled.input`
   margin: 0 30px 0 34px;
   outline: none;
   border: none;
+
   &::placeholder {
     color: var(--color-gray-dk);
   }

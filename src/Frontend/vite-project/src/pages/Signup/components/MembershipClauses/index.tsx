@@ -1,20 +1,20 @@
-import styled from "@emotion/styled";
-import { useState } from "react";
+import styled from '@emotion/styled';
+import { useState } from 'react';
 
-import CustomCheckbox from "./CustomCheckbox";
+import CustomCheckbox from './CustomCheckbox';
 
 const MembershipClauses = () => {
   const clauseList: string[] = [
-    "만 14세 이상입니다. (필수)",
-    "이용약관 동의 (필수)",
-    "개인 정보 수집 및 이용 동의 (필수)",
-    "선택 정보 수집 및 이용 동의 (선택)",
-    "개인정보 마케팅 활용 동의(선택)",
-    "마케팅 알림 수신 동의(선택)",
+    '만 14세 이상입니다. (필수)',
+    '이용약관 동의 (필수)',
+    '개인 정보 수집 및 이용 동의 (필수)',
+    '선택 정보 수집 및 이용 동의 (선택)',
+    '개인정보 마케팅 활용 동의(선택)',
+    '마케팅 알림 수신 동의(선택)',
   ];
 
   const [isCheckedList, setIsCheckedList] = useState<boolean[]>(
-    Array(clauseList.length).fill(false)
+    Array(clauseList.length).fill(false),
   );
   const [isCheckedAll, setIsCheckedAll] = useState(false);
 
@@ -62,8 +62,9 @@ const Wrapper = styled.ul`
   display: flex;
   flex-direction: column;
   padding: 0 16px;
+
   ::before {
-    content: "";
+    content: '';
     border-top: 1px solid var(--color-gray-lt);
     margin-bottom: 16px;
   }

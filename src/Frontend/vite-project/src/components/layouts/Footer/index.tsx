@@ -1,8 +1,8 @@
-import styled from "@emotion/styled";
-import { Box } from "@chakra-ui/react";
+import styled from '@emotion/styled';
+import { Box } from '@chakra-ui/react';
 
-import GitHubIcon from "@/assets/github.svg?react";
-import NotionIcon from "@/assets/notion.svg?react";
+import GitHubIcon from '@/assets/github.svg?react';
+import NotionIcon from '@/assets/notion.svg?react';
 
 const Footer = () => {
   return (
@@ -23,6 +23,8 @@ const Footer = () => {
 };
 
 export default Footer;
+
+// styles
 
 const Wrapper = styled.div`
   display: flex;

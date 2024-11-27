@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 type UserState = {
   name: string;
@@ -21,36 +21,36 @@ type UserState = {
 };
 
 const useUserStore = create<UserState>((set) => ({
-  name: "",
+  name: '',
   setName: (name) => set({ name }),
-  birthdate: "",
+  birthdate: '',
   setBirthdate: (birthdate) => set({ birthdate }),
-  phone: "",
+  phone: '',
   setPhone: (phone) => set({ phone }),
-  email: "",
+  email: '',
   setEmail: (email) => set({ email }),
-  address: "",
+  address: '',
   setAddress: (address) => set({ address }),
-  nickname: "",
+  nickname: '',
   setNickname: (nickname) => set({ nickname }),
   interests: [],
   setInterests: (interest) =>
     set((state) => ({
       interests: [...state.interests, interest],
     })),
-  imageUrl: "",
+  imageUrl: '',
   setImageUrl: (imageUrl) => set({ imageUrl }),
 
   clearUserInfo: () =>
     set({
-      name: "",
-      birthdate: "",
-      phone: "",
-      email: "",
-      address: "",
-      nickname: "",
+      name: '',
+      birthdate: '',
+      phone: '',
+      email: '',
+      address: '',
+      nickname: '',
       interests: [],
-      imageUrl: "",
+      imageUrl: '',
     }),
 }));
 

@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 type BusinessArtistState = {
   businessNumber: string;
@@ -13,24 +13,24 @@ type BusinessArtistState = {
 };
 
 const useBusinessArtistStore = create<BusinessArtistState>((set) => ({
-  businessNumber: "",
+  businessNumber: '',
   setBusinessNumber: (businessNumber) => set({ businessNumber }),
 
-  startDate: "",
+  startDate: '',
   setStartDate: (startDate) => set({ startDate }),
 
-  presidentName: "",
+  presidentName: '',
   setPresidentName: (presidentName) => set({ presidentName }),
 
-  about: "",
+  about: '',
   setAbout: (about) => set({ about }),
 
   clearBusinessInfo: () =>
     set({
-      businessNumber: "",
-      startDate: "",
-      presidentName: "",
-      about: "",
+      businessNumber: '',
+      startDate: '',
+      presidentName: '',
+      about: '',
     }),
 }));
 
