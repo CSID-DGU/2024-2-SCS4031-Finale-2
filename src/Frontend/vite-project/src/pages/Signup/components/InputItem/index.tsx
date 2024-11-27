@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
 type InputItemProps = {
   label?: string;
@@ -15,7 +15,7 @@ export const InputItem = ({ label, children }: InputItemProps) => {
 };
 
 type CustomInputProps = {
-  type: "text" | "textarea" | "date" | "tel" | "email" | "number";
+  type: 'text' | 'textarea' | 'date' | 'tel' | 'email' | 'number';
   placeholder?: string;
   value: string | string[] | number;
   onChange?: (e: any) => void;
@@ -36,7 +36,7 @@ export const CustomInput = ({
 }: CustomInputProps) => {
   return (
     <StyledCustomInput valid={valid}>
-      {type === "textarea" ? (
+      {type === 'textarea' ? (
         <textarea
           className="input-element input-element-textarea"
           placeholder={placeholder}
@@ -70,10 +70,12 @@ const StyledInputItem = styled.div`
   align-items: flex-start;
   gap: 8px;
   padding: 0 16px;
+
   .input-label {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-md);
     font-weight: 600;
   }
+
   .input-items {
     width: inherit;
     display: inherit;
@@ -86,28 +88,33 @@ const StyledCustomInput = styled.div<{ valid: boolean }>`
   width: 100%;
   display: flex;
   flex-direction: column;
+
   .input-element {
     align-self: stretch;
     border: none;
     border-bottom: ${({ valid }) =>
-      valid ? "1px solid var(--color-gray-md)" : "1px solid var(--color-red)"};
+      valid ? '1px solid var(--color-gray-md)' : '1px solid var(--color-red)'};
     border-radius: 0;
     padding: 8px 0;
     font-family: inherit;
     font-size: var(--font-size-sm);
     outline: none;
+
     &:focus {
       border-bottom: ${({ valid }) =>
-        valid ? "1px solid var(--color-black)" : "1px solid var(--color-red)"};
+        valid ? '1px solid var(--color-black)' : '1px solid var(--color-red)'};
     }
+
     ::placeholder {
       color: var(--color-gray-dk);
     }
   }
+
   .input-element-textarea {
     height: 120px;
     resize: none;
   }
+
   .input-validation {
     font-size: var(--font-size-xs);
     color: var(--color-red);

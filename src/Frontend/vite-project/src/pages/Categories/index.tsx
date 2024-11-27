@@ -1,11 +1,11 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
-import FakeSearchBar from "@/components/common/FakeSearchBar";
-import SearchModal from "@/components/common/SearchModal";
-import { CATEGORY_LIST, CURATION_LIST } from "@/constants/categories";
-import * as G from "@/styles/globalStyles";
-import CategoryItem from "./components/CategoryItem";
-import CurationItem from "./components/CurationItem";
+import FakeSearchBar from '@/components/common/FakeSearchBar';
+import SearchModal from '@/components/common/SearchModal';
+import { CATEGORY_LIST, CURATION_LIST } from '@/constants/categories';
+import * as G from '@/styles/globalStyles';
+import CategoryItem from './components/CategoryItem';
+import CurationItem from './components/CurationItem';
 
 const Categories = () => {
   return (
@@ -14,21 +14,13 @@ const Categories = () => {
       <SearchModal />
       <CategoryGrid>
         {CATEGORY_LIST.map((category) => (
-          <CategoryItem
-            key={category.title}
-            title={category.title}
-            src={category.src}
-          />
+          <CategoryItem key={category.title} title={category.title} src={category.src} />
         ))}
       </CategoryGrid>
       <G.Gap height={12} />
       <CurationWrapper>
         {CURATION_LIST.map((curation) => (
-          <CurationItem
-            key={curation.title}
-            title={curation.title}
-            des={curation.des}
-          />
+          <CurationItem key={curation.title} title={curation.title} des={curation.des} />
         ))}
       </CurationWrapper>
     </Wrapper>

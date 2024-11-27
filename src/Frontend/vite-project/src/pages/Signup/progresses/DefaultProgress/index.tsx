@@ -1,19 +1,16 @@
-import type { Mode } from "@/types";
-import Button from "../../../../components/common/form/InputButton";
-import ProgressBar from "../../components/ProgressBar";
-import { ProgressBox, ProgressGuidance, SelectItem } from "../styles";
+import type { Mode } from '@/types/user';
+import InputButton from '../../../../components/common/form/InputButton';
+import ProgressBar from '../../components/ProgressBar';
+import { ProgressBox, ProgressGuidance, SelectItem } from '../styles';
 
 type DefaultProgressProps = {
-  memberType: Mode | undefined;
-  onSelectMemberType: (memberType: Mode) => void;
+  mode: Mode | undefined;
+  onSelect: (registerType: Mode) => void;
 };
 
-const DefaultProgress = ({
-  memberType,
-  onSelectMemberType,
-}: DefaultProgressProps) => {
+const DefaultProgress = ({ mode, onSelect }: DefaultProgressProps) => {
   const handleSelect = (type: Mode) => {
-    onSelectMemberType(type);
+    onSelect(type);
   };
 
   return (
@@ -26,15 +23,15 @@ const DefaultProgress = ({
       </ProgressGuidance>
       <div className="progress-container">
         <SelectItem>
-          <Button
+          <InputButton
             label="일반 회원"
-            isSelected={memberType === "user"}
-            onClick={() => handleSelect("user")}
+            isSelected={mode === 'user'}
+            onClick={() => handleSelect('user')}
           />
-          <Button
+          <InputButton
             label="작가(판매자) 회원"
-            isSelected={memberType === "artist"}
-            onClick={() => handleSelect("artist")}
+            isSelected={mode === 'artist'}
+            onClick={() => handleSelect('artist')}
           />
         </SelectItem>
       </div>

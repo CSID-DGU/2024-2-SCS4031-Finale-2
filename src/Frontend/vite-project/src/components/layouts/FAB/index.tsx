@@ -1,15 +1,16 @@
-import styled from "@emotion/styled";
-import AddIcon from "@/assets/icons/add.svg?react";
-import ArrowUpwardIcon from "@/assets/icons/arrow-upward.svg?react";
+import styled from '@emotion/styled';
+
+import AddIcon from '@/assets/icons/add.svg?react';
+import ArrowUpwardIcon from '@/assets/icons/arrow-upward.svg?react';
+
 interface ScrollToTopButtonProps {
   scrollContainerRef: React.RefObject<HTMLElement>;
 }
-export const ScrollToTopButton = ({
-  scrollContainerRef,
-}: ScrollToTopButtonProps) => {
+
+export const ScrollToTopButton = ({ scrollContainerRef }: ScrollToTopButtonProps) => {
   const scrollToTop = () => {
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -19,6 +20,7 @@ export const ScrollToTopButton = ({
     </StyledScrollToTopButton>
   );
 };
+
 export const PostButton = () => {
   return (
     <StyledPostButton>
@@ -37,9 +39,11 @@ const StyledFAB = styled.button`
   border-radius: 50%;
   box-shadow: 2px 4px 4px 0px rgba(0, 0, 0, 0.25);
 `;
+
 const StyledScrollToTopButton = styled(StyledFAB)`
   border: 1px solid var(--color-black);
   background: var(--color-white);
+
   svg {
     color: var(--color-black);
   }
@@ -48,6 +52,7 @@ const StyledScrollToTopButton = styled(StyledFAB)`
 const StyledPostButton = styled(StyledFAB)`
   border: none;
   background: var(--color-black);
+
   svg {
     color: var(--color-white);
   }

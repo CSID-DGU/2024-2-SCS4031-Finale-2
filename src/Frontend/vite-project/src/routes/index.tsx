@@ -1,9 +1,11 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 
 import BasicLayout from '@/components/layouts/BasicLayout';
+import FreeLayout from '@/components/layouts/FreeLayout';
 import ArtistDetails from '@/pages/ArtistDetails';
 import Categories from '@/pages/Categories';
-import Chat from '@/pages/Chat';
+import ChatList from '@/pages/chats/ChatList';
+import ChatRoom from '@/pages/chats/ChatRoom';
 import Discover from '@/pages/Discover';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
@@ -14,15 +16,15 @@ import MyOrders from '@/pages/MyOrders';
 import MySales from '@/pages/MySales';
 import ProductDetails from '@/pages/ProductDetails';
 import ProductPosting from '@/pages/ProductPosting';
-import Search from '@/pages/Search';
 import SearchResults from '@/pages/SearchResults';
 import Signup from '@/pages/Signup';
-import { ProtectedRoute } from './ProtectedRoute';
 import { RouterPath } from './path';
+import { ProtectedRoute } from './ProtectedRoute';
 
 const Routes = () => {
   return <RouterProvider router={router} />;
 };
+
 const router = createBrowserRouter([
   {
     path: RouterPath.root,
@@ -41,20 +43,6 @@ const router = createBrowserRouter([
         element: <Categories />,
       },
       {
-        path: RouterPath.search,
-        element: <Search />,
-        children: [
-          {
-            path: RouterPath.results,
-            element: <SearchResults />,
-          },
-        ],
-      },
-      {
-        path: `${RouterPath.products}/:productId`,
-        element: <ProductDetails />,
-      },
-      {
         path: RouterPath.products,
         element: <ProtectedRoute />,
         children: [
@@ -69,9 +57,9 @@ const router = createBrowserRouter([
         element: <ArtistDetails />,
       },
       {
-        path: RouterPath.chat,
+        path: RouterPath.chats,
         element: <ProtectedRoute />,
-        children: [{ index: true, element: <Chat /> }],
+        children: [{ index: true, element: <ChatList /> }],
       },
       {
         path: RouterPath.my,
@@ -103,12 +91,31 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: RouterPath.login,
-    element: <Login />,
-  },
-  {
-    path: RouterPath.signup,
-    element: <Signup />,
+    path: RouterPath.root,
+    element: <FreeLayout />,
+    children: [
+      {
+        path: RouterPath.results,
+        element: <SearchResults />,
+      },
+      {
+        path: RouterPath.chats,
+        element: <ProtectedRoute />,
+        children: [{ path: ':chatRoomId', element: <ChatRoom /> }],
+      },
+      {
+        path: RouterPath.login,
+        element: <Login />,
+      },
+      {
+        path: RouterPath.signup,
+        element: <Signup />,
+      },
+      {
+        path: `${RouterPath.products}/:productId`,
+        element: <ProductDetails />,
+      },
+    ],
   },
 ]);
 

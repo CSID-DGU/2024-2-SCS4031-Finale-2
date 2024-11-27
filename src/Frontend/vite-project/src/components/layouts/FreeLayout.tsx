@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
-import { useRef } from "react";
-import { Outlet } from "react-router-dom";
+import styled from '@emotion/styled';
+import { useRef } from 'react';
+import { Outlet } from 'react-router-dom';
 
 const FreeLayout = () => {
   const contentWrapperRef = useRef<HTMLDivElement>(null);

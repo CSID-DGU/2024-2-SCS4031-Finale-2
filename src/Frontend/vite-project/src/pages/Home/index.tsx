@@ -1,18 +1,20 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
-import Footer from "@/components/layouts/Footer";
-import { HEADER_HEIGHT } from "@/components/layouts/Header";
-import { TABBAR_HEIGHT } from "@/components/layouts/TabBar";
-import { homeAdList } from "@/constants/homeAdList";
-import { articleList } from "@/constants/articleList";
-import AdBanner from "./AdBanner";
-import ArticleBanner from "./ArticleBanner";
+import SearchModal from '@/components/common/SearchModal';
+import Footer from '@/components/layouts/Footer';
+import Header from '@/components/layouts/Header';
+import { AD_LIST, ARTICLE_LIST } from '@/constants/home';
+import { HEIGHTS } from '@/styles/constants';
+import AdBanner from './components/AdBanner';
+import ArticleBanner from './components/ArticleBanner';
 
 const Home = () => {
   return (
     <Wrapper>
-      <AdBanner adList={homeAdList} />
-      {articleList.map((item) => (
+      <Header />
+      <SearchModal />
+      <AdBanner adList={AD_LIST} />
+      {ARTICLE_LIST.map((item) => (
         <ArticleBanner
           key={item.title}
           image={item.image}
@@ -32,5 +34,5 @@ const Wrapper = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin: ${HEADER_HEIGHT} 0 ${TABBAR_HEIGHT} 0;
+  margin: ${HEIGHTS.HEADER} 0 ${HEIGHTS.BOTTOM} 0;
 `;

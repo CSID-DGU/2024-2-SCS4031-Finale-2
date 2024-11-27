@@ -1,16 +1,16 @@
-import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
 
-import type { Mode } from "@/types";
-import { TABBAR_HEIGHT } from "../TabBar";
-import { ScrollToTopButton, PostButton } from ".";
+import useModeStore from '@/store/useModeStore';
+import { HEIGHTS, Z_INDEX } from '@/styles/constants';
+import { PostButton, ScrollToTopButton } from '.';
 
 interface FABContainerProps {
-  mode: Mode;
   scrollContainerRef: React.RefObject<HTMLElement>;
 }
 
-const FABContainer = ({ mode, scrollContainerRef }: FABContainerProps) => {
+const FABContainer = ({ scrollContainerRef }: FABContainerProps) => {
+  const { mode } = useModeStore();
   const [showScrollToTopButton, setShowScrollToTopButton] = useState(false);
 
   useEffect(() => {
@@ -25,20 +25,18 @@ const FABContainer = ({ mode, scrollContainerRef }: FABContainerProps) => {
         }
       };
 
-      currentContainer.addEventListener("scroll", handleScroll);
+      currentContainer.addEventListener('scroll', handleScroll);
 
       return () => {
-        currentContainer.removeEventListener("scroll", handleScroll); // 언마운트 시 이벤트 제거
+        currentContainer.removeEventListener('scroll', handleScroll); // 언마운트 시 이벤트 제거
       };
     }
   }, [scrollContainerRef]);
 
   return (
     <Wrapper>
-      {showScrollToTopButton && (
-        <ScrollToTopButton scrollContainerRef={scrollContainerRef} />
-      )}
-      {mode === "seller" && <PostButton />}
+      {showScrollToTopButton && <ScrollToTopButton scrollContainerRef={scrollContainerRef} />}
+      {mode === 'artist' && <PostButton />}
     </Wrapper>
   );
 };
@@ -52,5 +50,6 @@ const Wrapper = styled.div`
   position: fixed;
   right: 16px;
   bottom: 16px;
-  margin-bottom: ${TABBAR_HEIGHT};
+  margin-bottom: ${HEIGHTS.BOTTOM};
+  z-index: ${Z_INDEX.FAB};
 `;

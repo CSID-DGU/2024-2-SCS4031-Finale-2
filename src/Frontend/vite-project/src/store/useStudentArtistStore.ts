@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 type StudentArtistState = {
   univEmail: string;
@@ -13,20 +13,20 @@ type StudentArtistState = {
 };
 
 const useStudentArtistStore = create<StudentArtistState>((set) => ({
-  univEmail: "",
+  univEmail: '',
   setUnivEmail: (univEmail) => set({ univEmail }),
-  univName: "",
+  univName: '',
   setUnivName: (univName) => set({ univName }),
-  major: "",
+  major: '',
   setMajor: (major) => set({ major }),
-  about: "",
+  about: '',
   setAbout: (about) => set({ about }),
   clearStudentInfo: () =>
     set({
-      univEmail: "",
-      univName: "",
-      major: "",
-      about: "",
+      univEmail: '',
+      univName: '',
+      major: '',
+      about: '',
     }),
 }));
 

@@ -1,11 +1,11 @@
-import { Box, Text } from "@chakra-ui/react";
-import { useState } from "react";
+import { Box, Text } from '@chakra-ui/react';
+import { useState } from 'react';
 
-import useVerifyBusiness from "@/apis/nts-businessman/useVerifyBusiness";
-import CTA from "@/components/common/CTA";
-import useBusinessInfoStore from "@/store/useBusinessArtistStore";
-import { CustomInput, InputItem } from "../../../components/InputItem";
-import { ProgressGuidance } from "../../styles";
+import useVerifyBusiness from '@/apis/nts-businessman/useVerifyBusiness';
+import CTA from '@/components/common/CTA';
+import useBusinessInfoStore from '@/store/useBusinessArtistStore';
+import { CustomInput, InputItem } from '../../../components/InputItem';
+import { ProgressGuidance } from '../../styles';
 
 type BusinessSeller1Props = {
   onSuccess: () => void;
@@ -22,25 +22,21 @@ const BusinessSeller1 = ({ onSuccess }: BusinessSeller1Props) => {
   } = useBusinessInfoStore();
 
   const { mutate: verify } = useVerifyBusiness();
-  const [verifyError, setVerifyError] = useState<string>("");
+  const [verifyError, setVerifyError] = useState<string>('');
 
   const removeHyphen = (str: string) => {
-    return str.replace(/-/g, "");
+    return str.replace(/-/g, '');
   };
 
   // 인증하기
   const handleVerifyBusiness = (e: React.MouseEvent) => {
     e.preventDefault();
 
-    setVerifyError("");
+    setVerifyError('');
 
     if (businessNumber && startDate && presidentName) {
       verify(
-        {
-          b_no: businessNumber,
-          start_dt: removeHyphen(startDate),
-          p_nm: presidentName,
-        },
+        { b_no: businessNumber, start_dt: removeHyphen(startDate), p_nm: presidentName },
         {
           onSuccess: () => {
             onSuccess(); // 인증 성공 시 Step2로 이동
@@ -48,7 +44,7 @@ const BusinessSeller1 = ({ onSuccess }: BusinessSeller1Props) => {
           onError: (error) => {
             setVerifyError(error.message);
           },
-        }
+        },
       );
     }
   };
@@ -65,7 +61,7 @@ const BusinessSeller1 = ({ onSuccess }: BusinessSeller1Props) => {
             <CustomInput
               type="number"
               placeholder="0000000000 (- 제외)"
-              value={businessNumber ?? ""}
+              value={businessNumber ?? ''}
               onChange={(e) => setBusinessNumber(e.target.value)}
             />
           </Box>
@@ -96,11 +92,7 @@ const BusinessSeller1 = ({ onSuccess }: BusinessSeller1Props) => {
             onClick={handleVerifyBusiness}
           />
           {verifyError && (
-            <Text
-              fontSize="var(--font-size-xs)"
-              color="var(--color-red)"
-              marginTop="4px"
-            >
+            <Text fontSize="var(--font-size-xs)" color="var(--color-red)" marginTop="4px">
               {verifyError}
             </Text>
           )}

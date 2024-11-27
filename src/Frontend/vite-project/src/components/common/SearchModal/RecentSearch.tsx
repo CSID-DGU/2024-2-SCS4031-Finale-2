@@ -1,87 +1,82 @@
-import styled from "@emotion/styled";
-import Chip from "../Chip";
-import { useState, useEffect } from "react";
-import { Text } from "@chakra-ui/react";
+import { RouterPath } from '@/routes/path';
+import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export const SEARCH_ARRAY_KEY = "searchArray";
+import { SEARCH_ARRAY_KEY } from '@/constants/search';
+import Chip from '../Chip';
+import * as S from './styles';
 
 const RecentSearch = () => {
-  const [searchArray, setSearchArray] = useState<
-    Array<{ keyword: string; key: string }>
-  >([]);
+  const [searchArray, setSearchArray] = useState<Array<{ keyword: string; key: string }>>([]);
+  const navigate = useNavigate();
 
-  const allDelete = () => {
+  const deleteAll = () => {
     setSearchArray([]);
     localStorage.removeItem(SEARCH_ARRAY_KEY);
   };
 
-  const handleStoredData = (key: string) => {
+  const deleteSearchKeyword = (key: string) => {
     const updatedArray = searchArray.filter((item) => item.key !== key);
     setSearchArray(updatedArray);
-    localStorage.setItem(SEARCH_ARRAY_KEY, JSON.stringify(updatedArray));
+    localStorage.setItem(SEARCH_ARRAY_KEY, JSON.stringify(searchArray));
+  };
+
+  const handleSearch = (keyword: string) => {
+    const filteredArray = searchArray.filter((item) => item.keyword !== keyword);
+    const newArray = [{ keyword, key: keyword }, ...filteredArray].slice(0, 10);
+    setSearchArray(newArray);
+    localStorage.setItem(SEARCH_ARRAY_KEY, JSON.stringify(newArray));
+    navigate(`/${RouterPath.results}?query=${keyword}`);
+  };
+
+  const handleChipClick = (item: { keyword: string; key: string }, isDeleteButton: boolean) => {
+    if (isDeleteButton) {
+      deleteSearchKeyword(item.key);
+    } else {
+      handleSearch(item.keyword);
+    }
   };
 
   useEffect(() => {
-    const storedData = localStorage.getItem(SEARCH_ARRAY_KEY);
-    if (storedData) {
-      setSearchArray(JSON.parse(storedData));
+    const storedSearchArray = localStorage.getItem(SEARCH_ARRAY_KEY);
+    if (storedSearchArray) {
+      setSearchArray(JSON.parse(storedSearchArray));
     }
   }, []);
 
   return (
-    <Wrapper>
-      <TitleWrapper>
-        <TitleText>최근 검색어</TitleText>
-        {searchArray.length > 0 && (
-          <DelText onClick={allDelete}>모두 삭제하기</DelText>
-        )}
-      </TitleWrapper>
-      <ChipWrapper>
+    <S.SectionWrapper>
+      <S.SectionTitle>최근 검색어</S.SectionTitle>
+      {searchArray.length > 0 && <DeleteAllButton onClick={deleteAll}>모두 삭제</DeleteAllButton>}
+      <RecentSearchWrapper>
         {searchArray.map((item) => (
           <Chip
             key={item.key}
             tag={item.keyword}
-            onClick={() => handleStoredData(item.key)}
+            onDeleteClick={() => handleChipClick(item, true)}
+            onSearchClick={() => handleChipClick(item, false)}
           />
         ))}
-      </ChipWrapper>
-    </Wrapper>
+      </RecentSearchWrapper>
+    </S.SectionWrapper>
   );
 };
 
 export default RecentSearch;
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-`;
-
-const ChipWrapper = styled.div`
+const RecentSearchWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 `;
 
-const TitleWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 10px;
-`;
-
-const DelText = styled(Text)`
-  color: var(--color-gray-deep, #909090);
-  text-align: right;
-  font-size: var(--font-size-sm);
+const DeleteAllButton = styled.button`
+  color: var(--color-gray-dk);
+  font-size: var(--font-size-xs);
   font-weight: 400;
   line-height: normal;
-  cursor: pointer;
-`;
-
-const TitleText = styled(Text)`
-  color: var(--color-black, #020715);
-  font-size: var(--font-size-md);
-  font-weight: 700;
-  line-height: normal;
+  position: absolute;
+  top: 18px;
+  right: 16px;
 `;

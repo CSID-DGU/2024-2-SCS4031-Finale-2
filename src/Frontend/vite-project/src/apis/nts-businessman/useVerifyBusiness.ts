@@ -1,8 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 
-import { fetchInstance } from "../instance";
-import { API_KEY, BASE_URL } from "./index";
-import { isAxiosError } from "axios";
+import fetchInstance from '../fetchInstance';
+import { API_KEY, BASE_URL } from './index';
 
 // 필수 키만
 type VerifyProps = {
@@ -18,33 +18,30 @@ async function verify({ b_no, start_dt, p_nm }: VerifyProps): Promise<void> {
         b_no,
         start_dt,
         p_nm,
-        p_nm2: "", // 대표자성명2
-        b_nm: "", // 상호
-        corp_no: "", // 법인등록번호
-        b_sector: "", // 주업태명
-        b_type: "", // 주종목명
+        p_nm2: '', // 대표자성명2
+        b_nm: '', // 상호
+        corp_no: '', // 법인등록번호
+        b_sector: '', // 주업태명
+        b_type: '', // 주종목명
       },
     ],
   };
 
   try {
-    await fetchInstance(BASE_URL).post(
-      `/validate?serviceKey=${API_KEY}`,
-      requestBody
-    );
+    await fetchInstance(BASE_URL).post(`/validate?serviceKey=${API_KEY}`, requestBody);
   } catch (error) {
     if (isAxiosError(error)) {
       if (error.response) {
         throw new Error(
           error.response.data.msg ||
             error.response.data.status_code ||
-            "사업자등록정보 조회에 실패했습니다."
+            '사업자등록정보 조회에 실패했습니다.',
         );
       } else {
-        throw new Error("네트워크 오류 또는 서버에 연결할 수 없습니다.");
+        throw new Error('네트워크 오류 또는 서버에 연결할 수 없습니다.');
       }
     } else {
-      throw new Error("알 수 없는 오류입니다.");
+      throw new Error('알 수 없는 오류입니다.');
     }
   }
 }

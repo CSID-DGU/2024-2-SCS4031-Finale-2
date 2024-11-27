@@ -1,22 +1,21 @@
-import searchWork from "@/apis/data/searchWork";
-import ProductItem from "@/components/common/ProductItem";
-import Grid from "@/components/styles/Grid";
-import { SearchWork } from "@/types";
-import styled from "@emotion/styled";
-import { useEffect, useRef, useState } from "react";
-import DropdownButton from "./Dropdown";
+import styled from '@emotion/styled';
+import { useEffect, useRef, useState } from 'react';
 
-export type ArtWorkOptions = "최신순" | "가격순" | "제목순";
+import ProductItem from '@/components/common/ProductItem';
+import * as G from '@/styles/globalStyles';
+import { SearchProductInfo } from '@/types';
+import DropdownButton from './Dropdown';
 
-const ArtWorkContents = () => {
+export type ArtWorkOptions = '최신순' | '가격순' | '제목순';
+
+const ArtWorkContents = ({ searchWork }: { searchWork: SearchProductInfo[] }) => {
   const searchWorkLen = searchWork.length;
   const originalSearchWork = useRef(searchWork);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] =
-    useState<ArtWorkOptions>("최신순");
+  const [selectedOption, setSelectedOption] = useState<ArtWorkOptions>('최신순');
   const [sortedWork, setSortedWork] = useState(searchWork);
 
-  const options: ArtWorkOptions[] = ["최신순", "가격순", "제목순"];
+  const options: ArtWorkOptions[] = ['최신순', '가격순', '제목순'];
 
   const handleOpen = () => {
     setIsOpen(!isOpen);
@@ -27,16 +26,15 @@ const ArtWorkContents = () => {
     setIsOpen(false);
   };
 
-  const sortByPrice = (a: SearchWork, b: SearchWork) => a.price - b.price;
-  const sortByTitle = (a: SearchWork, b: SearchWork) =>
-    a.title.localeCompare(b.title);
+  const sortByPrice = (a: SearchProductInfo, b: SearchProductInfo) => a.price - b.price;
+  const sortByTitle = (a: SearchProductInfo, b: SearchProductInfo) => a.name.localeCompare(b.name);
 
   useEffect(() => {
-    if (selectedOption === "최신순") {
+    if (selectedOption === '최신순') {
       setSortedWork([...originalSearchWork.current]);
-    } else if (selectedOption === "가격순") {
+    } else if (selectedOption === '가격순') {
       setSortedWork([...searchWork].sort(sortByPrice));
-    } else if (selectedOption === "제목순") {
+    } else if (selectedOption === '제목순') {
       setSortedWork([...searchWork].sort(sortByTitle));
     }
   }, [selectedOption, searchWork]);
@@ -44,7 +42,7 @@ const ArtWorkContents = () => {
   return (
     <div>
       <ResultWrapper>
-        {searchWorkLen}점의 작품{" "}
+        {searchWorkLen}점의 작품
         <DropdownButton<ArtWorkOptions>
           isOpen={isOpen}
           selectedOption={selectedOption}
@@ -53,17 +51,23 @@ const ArtWorkContents = () => {
           handleSelect={handleSelect}
         />
       </ResultWrapper>
-      <Grid col={2}>
-        {sortedWork.map((item) => (
-          <ProductItem
-            key={item.id}
-            author={item.artist}
-            title={item.title}
-            src={item.src}
-            price={item.price}
-          />
-        ))}
-      </Grid>
+      {searchWorkLen === 0 ? (
+        <NoDataMessage>데이터가 없습니다.</NoDataMessage>
+      ) : (
+        <G.Grid col={2}>
+          {sortedWork.map((item) => (
+            <ProductItem
+              id={item.id}
+              key={item.id}
+              author={item.artist}
+              title={item.name}
+              src={item.thumbnailUrl}
+              price={item.price}
+              isLiked={false}
+            />
+          ))}
+        </G.Grid>
+      )}
     </div>
   );
 };
@@ -82,4 +86,14 @@ const ResultWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+`;
+
+const NoDataMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 40px 0;
+  font-weight: 600;
+  color: var(--color-black);
 `;

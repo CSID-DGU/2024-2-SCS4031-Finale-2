@@ -1,7 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 
-import { fetchInstance } from "../instance";
-import { isAxiosError } from "axios";
+import fetchInstance from '../fetchInstance';
 
 type PutUserProps = {
   name: string;
@@ -16,7 +16,7 @@ type PutUserProps = {
 
 async function putUser({
   name,
-  userImageUrl = "",
+  userImageUrl = '',
   nickname,
   email,
   birthdate,
@@ -34,23 +34,18 @@ async function putUser({
     address,
     hashTags,
   };
-  const token = localStorage.getItem("accessToken");
 
   try {
-    await fetchInstance().put(`/users`, requestBody, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    await fetchInstance().put(`/users`, requestBody);
   } catch (error) {
     if (isAxiosError(error)) {
       if (error.response) {
-        throw new Error(error.response.data.message || "유저 정보 수정 실패");
+        throw new Error(error.response.data.message || '유저 정보 수정 실패');
       } else {
-        throw new Error("네트워크 오류 또는 서버에 연결할 수 없습니다.");
+        throw new Error('네트워크 오류 또는 서버에 연결할 수 없습니다.');
       }
     } else {
-      throw new Error("알 수 없는 오류입니다.");
+      throw new Error('알 수 없는 오류입니다.');
     }
   }
 }

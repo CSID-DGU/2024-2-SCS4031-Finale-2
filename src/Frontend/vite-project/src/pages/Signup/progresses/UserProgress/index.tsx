@@ -1,19 +1,15 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import usePutUser from "@/apis/users/usePutUser";
-import CTA, { CTAContainer } from "@/components/common/CTA";
-import { RouterPath } from "@/routes/path";
-import useUserStore from "@/store/useUserStore";
-import { CustomInput, InputItem } from "../../components/InputItem";
-import MembershipClauses from "../../components/MembershipClauses";
-import ProgressBar from "../../components/ProgressBar";
-import { ProgressBox, ProgressGuidance } from "../styles";
-import {
-  handleBirthDateChange,
-  handleEmailChange,
-  handlePhoneChange,
-} from "../utils";
+import usePutUser from '@/apis/users/usePutUser';
+import CTA, { CTAContainer } from '@/components/common/CTA';
+import { RouterPath } from '@/routes/path';
+import useUserStore from '@/store/useUserStore';
+import { CustomInput, InputItem } from '../../components/InputItem';
+import MembershipClauses from '../../components/MembershipClauses';
+import ProgressBar from '../../components/ProgressBar';
+import { ProgressBox, ProgressGuidance } from '../styles';
+import { handleBirthDateChange, handleEmailChange, handlePhoneChange } from '../utils';
 
 const UserProgress = () => {
   const {
@@ -44,14 +40,14 @@ const UserProgress = () => {
       { name, birthdate, phone, email, address, nickname, hashTags: interests },
       {
         onSuccess: () => {
-          alert("회원가입을 축하합니다!");
+          alert('회원가입을 축하합니다!');
           clearUserInfo();
           navigate(RouterPath.home);
         },
         onError: (error) => {
           alert(error);
         },
-      }
+      },
     );
   };
 
@@ -69,9 +65,7 @@ const UserProgress = () => {
             <CustomInput
               type="date"
               value={birthdate}
-              onChange={(e) =>
-                handleBirthDateChange(e, setBirthdate, setIsBirthdateValid)
-              }
+              onChange={(e) => handleBirthDateChange(e, setBirthdate, setIsBirthdateValid)}
               valid={isBirthdateValid}
               caution="생년월일을 다시 확인해주세요."
             />
@@ -91,9 +85,7 @@ const UserProgress = () => {
               type="email"
               placeholder="abc@1618.com"
               value={email}
-              onChange={(e) =>
-                handleEmailChange(e, setEmail, setIsEmailFormValid)
-              }
+              onChange={(e) => handleEmailChange(e, setEmail, setIsEmailFormValid)}
               valid={isEmailFormValid}
               caution="이메일을 다시 확인해주세요."
             />
