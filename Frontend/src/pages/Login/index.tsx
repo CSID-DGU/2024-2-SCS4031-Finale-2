@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { useNavigate } from 'react-router-dom';
 
 // import { getKakaoLgoin } from '@/apis/login/useGetKakaoLogin';
-import Logo from '@/assets/logo.svg?react';
+
 import IconButton from '@/components/common/IconButton';
 import Header from '@/components/layouts/Header';
 import { BACKGROUND_IMAGE_LIST } from '@/constants/login';
@@ -38,7 +38,6 @@ const Login = () => {
         }
       />
       <ContentWrapper>
-        <Logo className="logo-svg" />
         <Text color="var(--color-white)" textAlign="center" fontSize="var(--font-size-md)">
           예술은 비율 속 무한을 드러내며, <br />
           그 무한은 숨겨진 가치를 밝혀줍니다. <br />
