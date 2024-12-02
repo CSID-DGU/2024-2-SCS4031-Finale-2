@@ -1,6 +1,6 @@
 spring: # test profile
   main:
-    spring.main.allow-bean-definition-overriding=true
+    allow-bean-definition-overriding: true
   datasource:
     url: "jdbc:h2:mem:Code2CV"
     username: "sa"
