@@ -17,7 +17,7 @@ const DefaultProgress = ({ mode, onSelect }: DefaultProgressProps) => {
     <ProgressBox>
       <ProgressBar percentage={50} />
       <ProgressGuidance>
-        1.618이 처음이시네요!
+        저희 서비스가 처음이시네요!
         <br />
         회원 유형을 선택해주세요.
       </ProgressGuidance>

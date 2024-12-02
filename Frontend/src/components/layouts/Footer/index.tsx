@@ -17,7 +17,8 @@ const Footer = () => {
           <NotionIcon />
         </Box>
       </Box>
-      <p>©️ 2024. 구해줘 쿠키즈 All rights reserved.</p>
+
+      <p>©️ 2024. Finalle All rights reserved.</p>
     </Wrapper>
   );
 };

@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { useLocation } from 'react-router-dom';
 
-import Logo from '@/assets/logo.svg?react';
 import IconButton from '@/components/common/IconButton';
 import { RouterPath } from '@/routes/path';
 import useModeStore from '@/store/useModeStore';
@@ -23,7 +22,7 @@ const Header = ({ title, leftSideChildren, rightSideChildren }: HeaderProps) => 
     if (pathname === RouterPath.home) {
       return (
         <>
-          <Logo />
+          <div></div>
           <IconBox>
             <IconButton icon="search" onClick={() => setIsModalOpen(!isModalOpen)} />
             {mode === 'user' ? (

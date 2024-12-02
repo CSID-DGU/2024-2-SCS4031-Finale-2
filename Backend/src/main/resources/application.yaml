@@ -1,0 +1,33 @@
+spring: # test profile
+  datasource:
+    url: "jdbc:h2:mem:Code2CV"
+    username: "sa"
+    password: ""
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true # SQL 포맷팅
+        highlight_sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+
+logging.level:
+  org.hibernate:
+    orm.jdbc.bind: trace
+    SQL: debug
+
+management:
+  endpoints:
+    web:
+      exposure: # 외부에 노출할 엔드포인트
+        include: prometheus, health, info
+  metrics:
+    tags:
+      application: "finale" # 메트릭 데이터에 태그를 추가
