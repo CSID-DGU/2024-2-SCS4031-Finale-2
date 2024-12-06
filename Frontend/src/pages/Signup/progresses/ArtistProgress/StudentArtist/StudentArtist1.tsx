@@ -1,10 +1,10 @@
 import { Box, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 
-import useCertifyCode from '@/apis/univ-cert/useCertifyCode';
-import useCertifyEmail from '@/apis/univ-cert/useCertifyEmail';
-import useCheckUniv from '@/apis/univ-cert/useCheckUniv';
-import useClearUser from '@/apis/univ-cert/useClearUser';
+// import useCertifyCode from '@/apis/univ-cert/useCertifyCode';
+// import useCertifyEmail from '@/apis/univ-cert/useCertifyEmail';
+// import useCheckUniv from '@/apis/univ-cert/useCheckUniv';
+// import useClearUser from '@/apis/univ-cert/useClearUser';
 import CTA from '@/components/common/CTA';
 import useStudentInfoStore from '@/store/useStudentArtistStore';
 import { CustomInput, InputItem } from '../../../components/InputItem';
@@ -24,10 +24,10 @@ const StudentArtist1 = ({ onSuccess }: StudentArtist1Props) => {
   const [code, setCode] = useState<string>('');
   const [isCodeValid, setIsCodeValid] = useState<boolean>(true);
 
-  const { mutate: checkUniv } = useCheckUniv();
-  const { mutate: certifyEmail } = useCertifyEmail();
-  const { mutate: certifyCode } = useCertifyCode();
-  const { mutate: clearUser } = useClearUser();
+  // const { mutate: checkUniv } = useCheckUniv();
+  // const { mutate: certifyEmail } = useCertifyEmail();
+  // const { mutate: certifyCode } = useCertifyCode();
+  // const { mutate: clearUser } = useClearUser();
   const [checkUnivError, setCheckUnivError] = useState<string | undefined>('');
   const [certifyEmailError, setCertifyEmailError] = useState<string | undefined>('');
   const [certifyCodeError, setCertifyCodeError] = useState<string | undefined>('');
@@ -42,42 +42,42 @@ const StudentArtist1 = ({ onSuccess }: StudentArtist1Props) => {
       return;
     }
 
-    checkUniv(
-      { univName },
-      {
-        onSuccess: (data) => {
-          if (data.success) {
-            setIsEmailChecked(true);
-            setCertifyEmailError('');
+    // checkUniv(
+    //   { univName },
+    //   {
+    //     onSuccess: (data) => {
+    //       if (data.success) {
+    //         setIsEmailChecked(true);
+    //         setCertifyEmailError('');
 
-            certifyEmail(
-              { email: univEmail, univName },
-              {
-                onSuccess: (data) => {
-                  if (data.success) {
-                    setIsCodeSent(true);
-                    alert('인증코드가 전송되었습니다.\n메일함을 확인해주세요.');
-                  } else {
-                    alert('인증코드 전송에 실패했습니다.');
-                  }
-                },
-                onError: (error) => {
-                  setCertifyEmailError(error.message);
-                  alert(certifyEmailError);
-                },
-              },
-            );
-          } else {
-            setIsUnivValid(false);
-            setCheckUnivError(data.message);
-          }
-        },
-        onError: (error) => {
-          setIsUnivValid(false);
-          setCheckUnivError(error.message);
-        },
-      },
-    );
+    //         certifyEmail(
+    //           { email: univEmail, univName },
+    //           {
+    //             onSuccess: (data) => {
+    //               if (data.success) {
+    //                 setIsCodeSent(true);
+    //                 alert('인증코드가 전송되었습니다.\n메일함을 확인해주세요.');
+    //               } else {
+    //                 alert('인증코드 전송에 실패했습니다.');
+    //               }
+    //             },
+    //             onError: (error) => {
+    //               setCertifyEmailError(error.message);
+    //               alert(certifyEmailError);
+    //             },
+    //           },
+    //         );
+    //       } else {
+    //         setIsUnivValid(false);
+    //         setCheckUnivError(data.message);
+    //       }
+    //     },
+    //     onError: (error) => {
+    //       setIsUnivValid(false);
+    //       setCheckUnivError(error.message);
+    //     },
+    //   },
+    // );
   };
 
   // 인증코드 값 업데이트
@@ -96,25 +96,25 @@ const StudentArtist1 = ({ onSuccess }: StudentArtist1Props) => {
       return;
     }
 
-    certifyCode(
-      { email: univEmail, univName, code },
-      {
-        onSuccess: (data) => {
-          if (data.success) {
-            setIsCodeValid(true);
-            setUnivName(data.univName);
-            setUnivEmail(data.certified_email);
-            onSuccess(); // 인증 성공 시 Step2로 이동
-          } else {
-            setIsCodeValid(false);
-            setCertifyCodeError(data.message);
-          }
-        },
-        onError: (error) => {
-          setCertifyCodeError(error.message);
-        },
-      },
-    );
+    // certifyCode(
+    //   { email: univEmail, univName, code },
+    //   {
+    //     onSuccess: (data) => {
+    //       if (data.success) {
+    //         setIsCodeValid(true);
+    //         setUnivName(data.univName);
+    //         setUnivEmail(data.certified_email);
+    //         onSuccess(); // 인증 성공 시 Step2로 이동
+    //       } else {
+    //         setIsCodeValid(false);
+    //         setCertifyCodeError(data.message);
+    //       }
+    //     },
+    //     onError: (error) => {
+    //       setCertifyCodeError(error.message);
+    //     },
+    //   },
+    // );
   };
 
   // 인증된 유저 이메일 삭제 - 임시
@@ -125,21 +125,21 @@ const StudentArtist1 = ({ onSuccess }: StudentArtist1Props) => {
       return;
     }
 
-    clearUser(
-      { email: univEmail },
-      {
-        onSuccess: (data) => {
-          if (data.success) {
-            alert('인증 취소되었습니다.');
-          } else {
-            alert('인증 취소 오류');
-          }
-        },
-        onError: (error) => {
-          alert(error.message);
-        },
-      },
-    );
+    // clearUser(
+    //   { email: univEmail },
+    //   {
+    //     onSuccess: (data) => {
+    //       if (data.success) {
+    //         alert('인증 취소되었습니다.');
+    //       } else {
+    //         alert('인증 취소 오류');
+    //       }
+    //     },
+    //     onError: (error) => {
+    //       alert(error.message);
+    //     },
+    //   },
+    // );
   };
 
   return (

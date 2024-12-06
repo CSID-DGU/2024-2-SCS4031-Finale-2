@@ -3,7 +3,7 @@ package com.finale.global.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import static org.springframework.security.config.Customizer.withDefaults;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -39,14 +39,22 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
 		http
+			.cors(Customizer.withDefaults())
 			.securityMatcher("/oauth2/**")
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests((authorize) -> authorize
 				.requestMatchers("/oauth2/authorization/**",
-					"/oauth2/code/kakao/**"
+					"/oauth2/code/kakao/**",
+					"/oauth2/login/kakao", 
+					"/oauth2/**"
 				).permitAll()
 				.anyRequest().authenticated()
-			);
+			)
+			.oauth2Login(oauth2 -> oauth2
+			.redirectionEndpoint(redirection -> redirection
+			  .baseUri("/oauth2/code/*") // 카카오에서 반환되는 엔드포인트
+			)
+		  	);
 			// .oauth2Login((oauth2) -> oauth2
 			// 	.redirectionEndpoint(redirection -> redirection
 			// 		.baseUri("/oauth2/code/*"))
@@ -69,7 +77,7 @@ public class WebSecurityConfig {
 		http.csrf(AbstractHttpConfigurer::disable);
 		http.sessionManagement((session) -> session
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		http.cors(withDefaults());
+		http.cors(Customizer.withDefaults());
 		http.authorizeHttpRequests((authorize) ->
 			authorize
 				.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

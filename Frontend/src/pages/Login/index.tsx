@@ -10,6 +10,9 @@ import { BACKGROUND_IMAGE_LIST } from '@/constants/login';
 import { RouterPath } from '@/routes/path';
 import { HEIGHTS } from '@/styles/constants';
 import KakaoLoginButton from './components/KakaoLoginButton';
+import fetchInstance from '@/apis/fetchInstance';
+import { APIResponse, UserInfo } from '@/types';
+import axios from 'axios';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,8 +23,37 @@ const Login = () => {
   const backgroundImageCreator = BACKGROUND_IMAGE_LIST[randomIndex].creator;
 
   const handleLogin = () => {
-    window.location.href = `http://golden-ratio.duckdns.org/oauth2/login/kakao`; // 외부 경로로 리다이렉트
+    window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
+    const searchParams = new URLSearchParams(window.location.search);
+    const accessToken = searchParams.get('accessToken');
+    const refreshToken = searchParams.get('refreshToken');
+
+    if (accessToken && refreshToken) {
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      console.log('Tokens saved:', { accessToken, refreshToken });
+    }
+
   };
+  
+
+  // const handleLogin = async () => {
+  //   try {
+  //     const response = await axios.get('http://localhost:8080/oauth2/login/kakao', {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+  //     const { accessToken, refreshToken } = response.data.data;
+  //     localStorage.setItem('accessToken', accessToken);
+  //     localStorage.setItem('refreshToken', refreshToken);
+  
+  //     console.log('Login successful:', accessToken);
+  //   } catch (error) {
+  //     console.error('Login failed:', error);
+  //   }
+  // };
+
 
   return (
     <Wrapper backgroundImage={backgroundImage}>
