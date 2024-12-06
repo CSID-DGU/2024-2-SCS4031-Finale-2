@@ -1,4 +1,4 @@
-package com.yourproject.controller;
+package com.finale.product.controller;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
