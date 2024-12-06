@@ -22,8 +22,8 @@ public class KakaoController {
     @PostMapping("/kakao")
     public ResponseEntity<?> getAccessToken(@RequestBody Map<String, String> request) {
         String code = request.get("code");
-        String clientId = "<YOUR_CLIENT_ID>";
-        String redirectUri = "<YOUR_REDIRECT_URI>";
+        String clientId = "<619abd8bd20ef8db831ea0ca834ebe4e>";
+        String redirectUri = "<http://localhost:5173/oauth/kakao/callback>";
         String clientSecret = "<YOUR_CLIENT_SECRET>";
 
         String tokenUrl = "https://kauth.kakao.com/oauth/token";
