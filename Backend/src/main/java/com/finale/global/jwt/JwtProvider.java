@@ -6,7 +6,6 @@ import java.util.Date;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -16,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+
 public class JwtProvider implements InitializingBean {
+	
 	
 	private final JwtProperties jwtProperties;
 	private Key secretKey;
@@ -113,6 +114,12 @@ public class JwtProvider implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() {
+		System.out.println("JWT Properties: " + jwtProperties);
+		System.out.println("JWT Secret: " + jwtProperties.getSecret());
+		if (jwtProperties.getSecret() == null || jwtProperties.getSecret().isEmpty()) {
+			throw new IllegalStateException("JWT secret is not set in application properties!");
+		}
 		secretKey = new SecretKeySpec(jwtProperties.getSecret().getBytes(), SignatureAlgorithm.HS256.getJcaName());
 	}
+
 }

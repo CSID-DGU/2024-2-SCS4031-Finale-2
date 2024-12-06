@@ -1,3 +1,21 @@
+CREATE TABLE users (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  nickname VARCHAR(50) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  birthdate DATE NOT NULL,
+  phone VARCHAR(15) NOT NULL,
+  address VARCHAR(255),
+  created_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE user_hashtags (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT NOT NULL,
+  hash_tags VARCHAR(255) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+
 INSERT INTO users (nickname, email, birthdate, phone, address, created_at)
 VALUES
     ('JohnDoe', 'johndoe@example.com', '1990-01-15', '010-1234-5678', 'Seoul, South Korea', '2024-09-23T12:00:00'),
