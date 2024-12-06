@@ -1,7 +1,7 @@
 import { Box, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 
-import useVerifyBusiness from '@/apis/nts-businessman/useVerifyBusiness';
+//import useVerifyBusiness from '@/apis/nts-businessman/useVerifyBusiness';
 import CTA from '@/components/common/CTA';
 import useBusinessInfoStore from '@/store/useBusinessArtistStore';
 import { CustomInput, InputItem } from '../../../components/InputItem';
@@ -21,7 +21,7 @@ const BusinessSeller1 = ({ onSuccess }: BusinessSeller1Props) => {
     setPresidentName,
   } = useBusinessInfoStore();
 
-  const { mutate: verify } = useVerifyBusiness();
+  //const { mutate: verify } = useVerifyBusiness();
   const [verifyError, setVerifyError] = useState<string>('');
 
   const removeHyphen = (str: string) => {
@@ -35,17 +35,17 @@ const BusinessSeller1 = ({ onSuccess }: BusinessSeller1Props) => {
     setVerifyError('');
 
     if (businessNumber && startDate && presidentName) {
-      verify(
-        { b_no: businessNumber, start_dt: removeHyphen(startDate), p_nm: presidentName },
-        {
-          onSuccess: () => {
-            onSuccess(); // 인증 성공 시 Step2로 이동
-          },
-          onError: (error) => {
-            setVerifyError(error.message);
-          },
-        },
-      );
+      // verify(
+      //   { b_no: businessNumber, start_dt: removeHyphen(startDate), p_nm: presidentName },
+      //   {
+      //     onSuccess: () => {
+      //       onSuccess(); // 인증 성공 시 Step2로 이동
+      //     },
+      //     onError: (error) => {
+      //       setVerifyError(error.message);
+      //     },
+      //   },
+      // );
     }
   };
 

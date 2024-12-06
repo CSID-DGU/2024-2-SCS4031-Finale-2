@@ -16,7 +16,7 @@ const initInstance = (config: AxiosRequestConfig): AxiosInstance => {
   // API 요청 시마다 최신 토큰을 가져옴
   instance.interceptors.request.use((config) => {
     const token = localStorage.getItem('accessToken');
-
+    console.log('ininInstance token', config, token);
     // 요청 URL이 BASE_URL인 경우에만 Authorization 헤더 추가
     // 외부 API는 Authorization이 필요 없으므로
     if (token && config.baseURL === BASE_URL) {
