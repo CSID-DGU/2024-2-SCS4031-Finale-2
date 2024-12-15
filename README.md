@@ -1,4 +1,5 @@
 ## FINALE | 신진 예술가를 위한 예술품P2P플랫폼
+![Finale 이미지](https://raw.githubusercontent.com/username/repository/branch/Finale.png)
 
 ## 개요
 
