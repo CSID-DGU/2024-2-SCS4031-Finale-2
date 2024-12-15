@@ -1,5 +1,8 @@
 ## FINALE | 신진 예술가를 위한 예술품P2P플랫폼
+
+<p align="center">
 ![Finale 이미지](https://github.com/CSID-DGU/2024-2-SCS4031-Finale-2/blob/main/Finale.png)
+</p>
 
 ## 개요
 
