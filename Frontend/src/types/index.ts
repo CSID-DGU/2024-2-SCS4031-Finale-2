@@ -10,7 +10,7 @@ export type FollowResponse = { content: User[] };
 
 export type UserInfo = {
   username: string;
-  hashTags: string[];
+  hashTags: string;
   userImageUrl: string;
 };
 
@@ -50,9 +50,9 @@ export type InfiniteAPIResponse<T> = {
 
 export type SearchProductInfo = {
   id: number;
-  name: string;
-  artist: string;
-  thumbnailUrl: string;
+  title: string;
+  author: string;
+  src: string;
   price: number;
 };
 

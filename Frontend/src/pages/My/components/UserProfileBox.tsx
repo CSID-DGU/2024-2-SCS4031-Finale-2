@@ -11,9 +11,7 @@ const UserProfileBox = ({ userImageUrl, hashTags, username }: UserInfo) => {
         <TagWrapper>
           <InterestsWrapper>관심사</InterestsWrapper>
           <HastTabWrapper>
-            {hashTags.map((tag: string) => (
-              <span key={tag}>{tag}</span>
-            ))}
+            <span>{hashTags}</span>
           </HastTabWrapper>
         </TagWrapper>
       </DetailWrapper>

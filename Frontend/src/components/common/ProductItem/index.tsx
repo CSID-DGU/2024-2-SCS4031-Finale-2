@@ -1,65 +1,21 @@
 import styled from '@emotion/styled';
 
-import useDeleteLikes from '@/apis/users/useDeleteLikes';
-import usePostLikes from '@/apis/users/usePostLikes';
-import Thumbnail from '@/components/common/Thumbnail';
-import { useState } from 'react';
-
 type ProductItemProps = {
-  id: number;
+  id: any;
   author: string;
   title: string;
   price: number;
   heart?: boolean;
-  src?: string;
+  src?: any;
   alt?: string;
   isLiked: boolean;
+  onClick: any;
 };
 
-const ProductItem = ({ id, author, title, price, src, alt, isLiked }: ProductItemProps) => {
-  const [productLiked, setProductLiked] = useState(isLiked);
-
-  const { mutate: postLike, status: isPostStatus } = usePostLikes();
-  const { mutate: deleteLike, status: isDeleteStatus } = useDeleteLikes();
-
-  const handleHeartClick = () => {
-    if (productLiked) {
-      deleteLike(id, {
-        onSuccess: () => {
-          setProductLiked(false);
-        },
-        onError: (error) => {
-          console.error('Failed to delete follow:', error);
-          alert('팔로우 취소에 실패했습니다.');
-        },
-      });
-    } else {
-      postLike(id, {
-        onSuccess: () => {
-          setProductLiked(true);
-        },
-        onError: (error) => {
-          console.error('Failed to post follow:', error);
-          alert('팔로우에 실패했습니다.');
-        },
-      });
-    }
-  };
-
+const ProductItem = ({ id, author, title, price, src, alt }: ProductItemProps) => {
   return (
     <Wrapper>
-      <Thumbnail
-        ratio="square"
-        src={src}
-        alt={alt}
-        heart={true}
-        handleHeartClick={handleHeartClick}
-        productLiked={productLiked}
-        isPostStatus={isPostStatus}
-        isDeleteStatus={isDeleteStatus}
-        id={id}
-        type="product"
-      />
+      <img src={src} alt={alt} id={id}></img>
       <MidWrapper>
         <DescriptionWrapper style={{ fontWeight: '600' }}>{author}</DescriptionWrapper>
         <DescriptionWrapper>{title}</DescriptionWrapper>
@@ -74,7 +30,7 @@ export default ProductItem;
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-  max-width: 170px;
+  max-width: 100px;
   background-color: var(--color-white);
 `;
 

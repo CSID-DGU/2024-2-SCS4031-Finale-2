@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
 
 interface CategoryItemProps {
   title: string;
@@ -6,9 +7,12 @@ interface CategoryItemProps {
 }
 
 const CategoryItem = ({ title, src }: CategoryItemProps) => {
+  const navigate = useNavigate();
   return (
     <Wrapper>
-      <CategoryThumbnail>{src && <img src={src} alt="Category thumbnail" />}</CategoryThumbnail>
+      <CategoryThumbnail>
+        {src && <img src={src} alt="Category thumbnail" onClick={() => navigate('/discover')} />}
+      </CategoryThumbnail>
       <Title>{title}</Title>
     </Wrapper>
   );

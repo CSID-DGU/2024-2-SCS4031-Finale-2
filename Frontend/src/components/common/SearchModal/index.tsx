@@ -7,7 +7,7 @@ import Ad from './Ad';
 import PopularSearch from './PopularSearch';
 import RecentSearch from './RecentSearch';
 
-const SearchModal = () => {
+const SearchModal = ({ handleSearchData, searchData }: any) => {
   const { isModalOpen } = useSearchModalStore();
   const searchSectionList: React.ReactNode[] = [<RecentSearch />, <PopularSearch />, <Ad />]; // 각 섹션을 리스트로 관리
 
@@ -17,7 +17,7 @@ const SearchModal = () => {
     <>
       {isModalOpen && (
         <ModalLayout>
-          <SearchBar />
+          <SearchBar handleSearchData={handleSearchData} searchData={searchData} />
           <SectionsWrapper>
             {searchSectionList.map((section, index) => (
               <div key={index}>{section}</div>

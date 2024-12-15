@@ -17,6 +17,11 @@ const Header = ({ title, leftSideChildren, rightSideChildren }: HeaderProps) => 
   const { pathname } = useLocation();
   const { mode } = useModeStore();
   const { isModalOpen, setIsModalOpen } = useSearchModalStore();
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=619abd8bd20ef8db831ea0ca834ebe4e&redirect_uri=http://localhost:5173/oauth/kakao/callback`;
+
+  const handleClick = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
 
   const renderElements = () => {
     if (pathname === RouterPath.home) {
@@ -45,7 +50,14 @@ const Header = ({ title, leftSideChildren, rightSideChildren }: HeaderProps) => 
     }
   };
 
-  return <Wrapper>{renderElements()}</Wrapper>;
+  return (
+    <Wrapper>
+      <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+        <button onClick={handleClick}>Sign In</button>
+        {renderElements()}
+      </div>
+    </Wrapper>
+  );
 };
 
 export default Header;

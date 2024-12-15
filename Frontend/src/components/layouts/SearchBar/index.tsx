@@ -17,13 +17,21 @@ const MAX_RECENT_SEARCHES = 10;
 type SearchBarProps = {
   includeBack?: boolean;
   includeFavorite?: boolean;
+  handleSearchData?: any;
+  searchData?: any;
   goBack?: () => void; // SearchResult에서만 전달됨
 };
 type FormValues = {
   searchWord: string;
 };
 
-const SearchBar = ({ includeBack = true, includeFavorite = false, goBack }: SearchBarProps) => {
+const SearchBar = ({
+  includeBack = true,
+  includeFavorite = false,
+  goBack,
+  searchData,
+  handleSearchData,
+}: SearchBarProps) => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialSearchWord = searchParams.get('query') || '';
@@ -62,8 +70,8 @@ const SearchBar = ({ includeBack = true, includeFavorite = false, goBack }: Sear
     setIsModalOpen(true);
   };
 
-  const onSubmit = (data: FormValues) => {
-    const currentSearchWord = data.searchWord.trim();
+  const onSubmit = () => {
+    const currentSearchWord = searchData.trim();
 
     if (currentSearchWord) {
       // 검색 기록 업데이트
@@ -88,6 +96,11 @@ const SearchBar = ({ includeBack = true, includeFavorite = false, goBack }: Sear
       navigate(`/${RouterPath.results}?query=${currentSearchWord}`);
     }
   };
+  useEffect(() => {
+    if (searchData !== searchWord) {
+      setValue('searchWord', searchData);
+    }
+  }, [searchData, searchWord, setValue]);
 
   return (
     <SearchBarWrapper>
@@ -98,6 +111,8 @@ const SearchBar = ({ includeBack = true, includeFavorite = false, goBack }: Sear
           type="text"
           placeholder={SEARCH_PLACEHOLDER}
           {...register('searchWord')}
+          value={searchData}
+          onChange={(e) => handleSearchData(e.target.value)}
           onClick={() => setIsModalOpen(true)}
         />
         {searchWord?.trim().length > 0 && <CancelIconButton onClick={handleRemoveSearchWord} />}

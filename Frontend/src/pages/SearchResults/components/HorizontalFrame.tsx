@@ -1,27 +1,32 @@
 import ArtistItem from '@/components/common/ArtistItem';
 import ProductItem from '@/components/common/ProductItem';
 import { SearchArtistInfo, SearchProductInfo } from '@/types/index';
+
 import styled from '@emotion/styled';
+import { useNavigate } from 'react-router-dom';
+import { RouterPath } from '@/routes/path';
 
 interface HorizontalFrameProps {
-  children: SearchArtistInfo[] | SearchProductInfo[];
+  children: any;
 }
 
 const HorizontalFrame = ({ children }: HorizontalFrameProps) => {
+  const navigate = useNavigate();
   return (
     <HorizontalScrollWrapper>
-      {children.map((item) => (
+      {children.map((item: any) => (
         <StyledItemWrapper key={item.id}>
           {'name' in item && (
             <ProductItem
               id={item.id}
-              author={item.artist}
-              title={item.name}
-              src={item.thumbnailUrl}
+              author={item.author}
+              title={item.title}
+              src={item.src}
               price={item.price}
               key={item.id}
               alt="artwork"
               isLiked={false}
+              onClick={() => navigate(`/${RouterPath.results}?query=${item.title}`)}
             />
           )}
           {'nickname' in item && (

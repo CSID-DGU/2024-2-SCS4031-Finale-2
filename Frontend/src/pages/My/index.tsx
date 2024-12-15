@@ -1,58 +1,30 @@
 import styled from '@emotion/styled';
-import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-
-import useGetArtist from '@/apis/artists/useGetArtist';
-import useGetUser from '@/apis/users/useGetUser';
-import Loader from '@/components/common/Loader';
-import Footer from '@/components/layouts/Footer';
-import useModeStore from '@/store/useModeStore';
 import { HEIGHTS } from '@/styles/constants';
-import { ArtistInfo, UserInfo } from '@/types';
-import ArtistProfileBox from './components/ArtistProfileBox';
 import UserMenuSection from './components/MenuSection/UserMenuSection';
 import UserProfileBox from './components/UserProfileBox';
 
+const userInfo = {
+  username: '정동현',
+  hashTags: '서양화',
+  userImageUrl:
+    'https://i.namu.wiki/i/Bge3xnYd4kRe_IKbm2uqxlhQJij2SngwNssjpjaOyOqoRhQlNwLrR2ZiK-JWJ2b99RGcSxDaZ2UCI7fiv4IDDQ.webp',
+};
+
 const My = () => {
-  return (
-    <ErrorBoundary fallback={<div>Error...</div>}>
-      <Suspense fallback={<Loader />}>
-        <MyContent />
-      </Suspense>
-    </ErrorBoundary>
-  );
+  return <MyContent />;
 };
 
 const MyContent = () => {
-  const { mode } = useModeStore();
-  const { data } = mode === 'user' ? useGetUser() : useGetArtist();
-
   return (
     <Wrapper>
-      {mode === 'user' ? (
-        <>
-          <ProfileSection>
-            <UserProfileBox
-              userImageUrl={(data.data as UserInfo).userImageUrl}
-              username={(data.data as UserInfo).username}
-              hashTags={(data.data as UserInfo).hashTags}
-            />
-          </ProfileSection>
-          <UserMenuSection />
-        </>
-      ) : (
-        <ProfileSection>
-          <ArtistProfileBox
-            ImageUrl={(data.data as ArtistInfo).ImageUrl}
-            nickname={(data.data as ArtistInfo).nickname}
-            description={(data.data as ArtistInfo).description}
-            totalFollowers={(data.data as ArtistInfo).totalFollowers}
-            totalLikes={(data.data as ArtistInfo).totalLikes}
-            about={(data.data as ArtistInfo).about}
-          />
-        </ProfileSection>
-      )}
-      <Footer />
+      <ProfileSection>
+        <UserProfileBox
+          userImageUrl={userInfo.userImageUrl}
+          username={userInfo.username}
+          hashTags={userInfo.hashTags}
+        />
+      </ProfileSection>
+      <UserMenuSection />
     </Wrapper>
   );
 };

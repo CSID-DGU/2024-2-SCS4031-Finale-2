@@ -1,67 +1,152 @@
 import styled from '@emotion/styled';
-import { Suspense, useEffect } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+
 import Masonry from 'react-masonry-css';
 
-import useGetFeed, { type Product } from '@/apis/products/useGetFeed';
-import Loader from '@/components/common/Loader';
 import SearchModal from '@/components/common/SearchModal';
 import SearchBar from '@/components/layouts/SearchBar';
 import { HEIGHTS } from '@/styles/constants';
+import { PRODUCTS, CHILDREN_ARTIST } from '@/constants/datas';
+import { useNavigate } from 'react-router-dom';
+import { RouterPath } from '@/routes/path';
 
-const Discover = () => (
+interface DiscoverProps {
+  followingList: any[];
+  handleFollowToggle: (id: any) => void;
+}
+
+const Discover = ({ followingList, handleFollowToggle }: DiscoverProps) => (
   <Wrapper>
     <SearchBar includeBack={false} includeFavorite={true} />
     <SearchModal />
     <ContentWrapper>
-      {/* todo: 폴백 UI 만들기 */}
-      <ErrorBoundary fallback={<>Error</>}>
-        <Suspense fallback={<Loader />}>
-          <Feed />
-        </Suspense>
-      </ErrorBoundary>
+      <Feed followingList={followingList} handleFollowToggle={handleFollowToggle} />
     </ContentWrapper>
   </Wrapper>
 );
 
-const Feed = () => {
-  const { data, fetchNextPage, hasNextPage } = useGetFeed();
-
-  // 스크롤 내려감에 따라 다음 페이지 데이터 페칭
-  const handleScroll = () => {
-    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-    if (scrollTop + clientHeight >= scrollHeight - 100 && hasNextPage) {
-      fetchNextPage();
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-
-    return () => window.removeEventListener('scroll', handleScroll); // 언마운트될 때 이벤트 리스너 해제
-  }, [fetchNextPage, hasNextPage]);
+const Feed = ({ followingList, handleFollowToggle }: DiscoverProps) => {
+  const navigate = useNavigate();
 
   return (
-    <ImageGrid
-      className="masonry-grid"
-      breakpointCols={{ default: 3, 600: 3, 480: 2 }}
-      columnClassName="masonry-grid-column"
-    >
-      {data?.pages.map((page) =>
-        page.products.map((product: Product) => (
-          <ImageItem key={product.id}>
-            <img src={product.thumbnailUrl} alt={product.name} />
-            <div className="image-item-overlay">
-              <p className="image-item-name">{product.name}</p>
-              <p className="image-item-artist">{product.artist}</p>
-            </div>
-          </ImageItem>
-        )),
-      )}
-    </ImageGrid>
+    <FeedWrapper>
+      {/* PRODUCTS 섹션 */}
+      <Section className="top">
+        <ImageGrid
+          className="masonry-grid-1"
+          breakpointCols={{ default: 3, 600: 3, 480: 2 }}
+          columnClassName="masonry-grid-column"
+        >
+          {PRODUCTS.map((item) => (
+            <ImageItem
+              key={item.id}
+              onClick={() => navigate(`/${RouterPath.results}?query=${item.name.trim()}`)}
+            >
+              <img src={item.thumbnailUrl} alt={item.name} />
+              <div className="image-item-overlay">
+                <p className="image-item-name">{item.name}</p>
+                <p className="image-item-artist">{item.artist}</p>
+              </div>
+            </ImageItem>
+          ))}
+        </ImageGrid>
+      </Section>
+
+      {/* CHILDREN_ARTIST 섹션 */}
+      <Section className="bottom">
+        <ImageGrid
+          className="masonry-grid-2"
+          breakpointCols={{ default: 2, 600: 2, 480: 2 }}
+          columnClassName="masonry-grid-column"
+        >
+          {CHILDREN_ARTIST.map((item) => (
+            <ArtistItem key={item.id}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <img src={item.src} alt={item.nickname} width={50} />
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    marginLeft: '2rem',
+                  }}
+                >
+                  <p className="image-item-name" style={{ fontSize: '1.5rem', fontWeight: 800 }}>
+                    {item.nickname}
+                  </p>
+                  <p className="image-item-artist" style={{ fontSize: '1.2rem', fontWeight: 300 }}>
+                    팔로워 수 {item.totalFollowers}
+                  </p>
+                </div>
+                <div style={{ position: 'relative', bottom: '-1rem', left: '5rem' }}>
+                  <FollowButton
+                    isFollowing={followingList.includes(item.id)}
+                    onClick={() => handleFollowToggle(item.id)}
+                  />
+                </div>
+              </div>
+            </ArtistItem>
+          ))}
+        </ImageGrid>
+      </Section>
+    </FeedWrapper>
   );
 };
 
+const FollowButton = ({ isFollowing, onClick }: { isFollowing: boolean; onClick: () => void }) => {
+  const buttonStyle = {
+    border: 'solid 1px',
+    padding: '0.5rem 1rem',
+    borderRadius: '2rem',
+    backgroundColor: isFollowing ? 'rgba(81, 79, 79, 0.259)' : 'white',
+    color: isFollowing ? 'white' : 'black',
+    cursor: 'pointer',
+  };
+
+  return (
+    <button style={buttonStyle} onClick={onClick}>
+      {isFollowing ? '팔로잉' : '팔로우'}
+    </button>
+  );
+};
+
+const FeedWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const Section = styled.div`
+  max-height: 700px; /* 원하는 높이 제한 */
+  overflow-y: auto; /* 스크롤 활성화 */
+  padding: 8px;
+
+  /* 스크롤바 스타일 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE, Edge */
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+`;
+
+const ArtistItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.02);
+
+  img {
+    border-radius: 30%;
+    width: 6rem;
+    height: 6rem;
+  }
+`;
 const Wrapper = styled.div`
   flex: 1;
   display: flex;
@@ -92,7 +177,7 @@ const ImageGrid = styled(Masonry)`
   }
 `;
 
-const ImageItem = styled.button`
+const ImageItem = styled.div`
   border-radius: var(--border-radius);
   overflow: hidden;
   position: relative;

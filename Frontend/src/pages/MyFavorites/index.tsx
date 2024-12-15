@@ -1,33 +1,22 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 
-import useGetFollow from '@/apis/users/useGetFollow';
-import useGetWishList from '@/apis/users/useGetWishes';
-import ArtistItem from '@/components/common/ArtistItem';
 import CategoryTabBar from '@/components/common/CategoryTabBar';
-import Loader from '@/components/common/Loader';
+
 import ProductItem from '@/components/common/ProductItem';
 import * as G from '@/styles/globalStyles';
-import { SearchProductInfo, User } from '@/types';
+import { CHILDREN_ARTIST, PRODUCTS } from '@/constants/datas';
 
-const MyFavorites = () => {
+interface FavProps {
+  handleIsLiked: any;
+  handleFollowToggle: (id: any) => void;
+}
+
+const MyFavorites = ({ handleIsLiked, handleFollowToggle }: FavProps) => {
   const categoryList = ['작품', '작가'];
   const [selectedTab, setSelectedTab] = useState('작품');
-  const { data: artistResults, status, refetch } = useGetFollow();
-  const { data: wishListResults } = useGetWishList();
-
-  useEffect(() => {
-    if (selectedTab === '작가') {
-      refetch();
-    }
-  }, [selectedTab, refetch]);
-
-  if (status === 'pending') {
-    return <Loader />;
-  }
-  if (status === 'error' || !artistResults) {
-    return <p>Error... console.log('Error:', error);</p>;
-  }
+  const likedLists = JSON.parse(localStorage.getItem('likedList') || '[]');
+  const followingList = JSON.parse(localStorage.getItem('followingList') || '[]');
 
   const handleTabClick = (tab: string) => {
     setSelectedTab(tab);
@@ -38,19 +27,20 @@ const MyFavorites = () => {
       <CategoryTabBar tabList={categoryList} tabClick={handleTabClick} tabState={selectedTab} />
       {selectedTab === '작품' ? (
         <Wrapper>
-          {wishListResults.data.products.length === 0 ? (
+          {likedLists?.length === 0 ? (
             <p>찜한 작품이 없습니다.</p>
           ) : (
             <G.Grid col={2}>
-              {wishListResults.data.products.map((product: SearchProductInfo) => (
+              {PRODUCTS.filter(
+                (product) => likedLists?.includes(product.id), // likedList에 해당 product.id가 있는지 확인
+              ).map((filteredProduct) => (
                 <ProductItem
-                  key={product.id}
-                  id={product.id}
-                  title={product.name}
-                  author={product.artist}
-                  price={product.price}
-                  src={product.thumbnailUrl}
-                  isLiked={true}
+                  key={filteredProduct.id}
+                  id={filteredProduct.id}
+                  title={filteredProduct.name}
+                  author={filteredProduct.artist}
+                  price={filteredProduct.price}
+                  src={filteredProduct.thumbnailUrl}
                 />
               ))}
             </G.Grid>
@@ -58,19 +48,19 @@ const MyFavorites = () => {
         </Wrapper>
       ) : (
         <Wrapper>
-          {artistResults?.data.content?.length === 0 ? (
+          {followingList === 0 ? (
             <p>팔로우한 작가가 없습니다.</p>
           ) : (
             <G.Grid col={2}>
-              {artistResults?.data.content?.map((artist: User) => (
+              {CHILDREN_ARTIST.filter(
+                (product) => followingList?.includes(product.id), // likedList에 해당 product.id가 있는지 확인
+              ).map((filteredProduct) => (
                 <ArtistItem
-                  artistId={artist.userId}
-                  key={artist.userId}
-                  author={artist.nickname}
-                  like={artist.totalLikes}
-                  follower={artist.totalFollowers}
-                  src={artist.userImageUrl}
-                  isFollow={true}
+                  id={filteredProduct.id}
+                  key={filteredProduct.id}
+                  author={filteredProduct.nickname}
+                  follower={filteredProduct.totalFollowers}
+                  src={filteredProduct.src}
                 />
               ))}
             </G.Grid>
@@ -85,4 +75,58 @@ export default MyFavorites;
 
 const Wrapper = styled.div`
   margin-top: 41px;
+`;
+
+type ArtistItemProps = {
+  id: any;
+  author: string;
+  title: string;
+  price: number;
+  heart?: boolean;
+  src?: any;
+  alt?: string;
+  isLiked: boolean;
+  onClick: any;
+  follower: number;
+  isFollow: boolean;
+};
+
+const ArtistItem = ({ id, author, src, alt, follower }: ArtistItemProps) => {
+  return (
+    <AWrapper>
+      <img src={src} alt={alt} id={id} style={{ borderRadius: '2rem' }}></img>
+      <MidAWrapper>
+        <DescriptionAWrapper style={{ fontWeight: '800', fontSize: '2rem' }}>
+          {author}
+        </DescriptionAWrapper>
+        <DescriptionAWrapper style={{ fontWeight: '300' }}>
+          팔로워 수 {follower}
+        </DescriptionAWrapper>
+      </MidAWrapper>
+    </AWrapper>
+  );
+};
+
+const AWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-width: 100px;
+
+  background-color: var(--color-white);
+`;
+
+const MidAWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 60px;
+  margin: 0.8rem 0;
+`;
+
+const DescriptionAWrapper = styled.p`
+  font-size: var(--font-size-sm);
 `;
