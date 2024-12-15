@@ -1,5 +1,5 @@
 ## FINALE | 신진 예술가를 위한 예술품P2P플랫폼
-![Finale 이미지](https://raw.githubusercontent.com/username/repository/branch/Finale.png)
+![Finale 이미지]([https://raw.githubusercontent.com/username/repository/branch/Finale.png](https://github.com/CSID-DGU/2024-2-SCS4031-Finale-2/blob/main/Finale.png?raw=true)
 
 ## 개요
 
